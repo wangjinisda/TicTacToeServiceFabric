@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html ng-csp ng-app="PartnerCoSellWeb">
+<head>
+    <meta charset="utf-8" />
+    <title>MOJA</title>
+    <!-- Stylesheets-->
+    <link href="dist/lib/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="dist/lib/css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="dist/lib/css/jquery.dataTables.css" rel="stylesheet" />
+    <link href="dist/lib/css/ui-light.min.css" rel="stylesheet" />
+    <link href="dist/min/uap.min.css" rel="stylesheet" />
+
+    <!-- Libraries -->
+    <script src="dist/lib/js/jquery.min.js"></script>
+    <script src="dist/lib/js/angular.min.js"></script>
+    <script src="dist/lib/js/base.min.js"></script>
+    <script src="dist/lib/js/jquery.dataTables.js"></script>
+    <script src="dist/lib/js/angular-animate.min.js"></script>
+    <script src="dist/lib/js/angular-sanitize.min.js"></script>
+    <script src="dist/lib/js/ui-bootstrap-tpls.min.js"></script>
+    <script src="dist/lib/js/ui.min.js"></script>
+    <script src="dist/lib/js/underscore-min.js"></script>
+    <script src="dist/lib/js/angular-applicationinsights.min.js"></script>
+    <script src="dist/lib/js/angular-resource.min.js"></script>
+    <script src="dist/lib/js/angular-ui-router.min.js"></script>
+    <!--<script src="dist/lib/js/angular-route.js"></script>-->
+    <script src="dist/lib/js/dataTables.bootstrap.min.js"></script>
+    <script src="dist/lib/js/dataTables.responsive.js"></script>
+    <script src="dist/lib/js/angular-datatables.min.js"></script>
+    <script src="dist/lib/js/angular-winjs.js"></script>
+    <script src="dist/lib/js/adal.js"></script>
+    <script src="dist/lib/js/adal-angular.js"></script>
+    <script src="dist/lib/js/angular-applicationinsights.min.js"></script>
+    <script src="dist/app/js/resource/Chart.js"></script>
+
+    <!-- App Config -->
+    <script src="dist/app/js/app.js"></script>
+    <script src="dist/app/js/environment.config.js"></script>
+
+    <!-- Services -->
+    <script src="dist/app/js/helpers/device.factory.js"></script>
+    <script src="dist/app/js/services/data.service.js"></script>
+    <script src="dist/app/js/services/partnerdeal.service.js"></script>
+    <script src="dist/app/js/services/crmnotes.service.js"></script>
+    <script src="dist/app/js/services/patnerdealmembers.service.js"></script>
+    <script src="dist/app/js/services/dashboard.service.js"></script>
+    <script src="dist/app/js/services/taxonomy.service.js"></script>
+    <script src="dist/app/js/services/product.service.js"></script>
+
+    <!-- Helpers -->
+    <script src="dist/app/js/helpers/animation.js"></script>
+    <script src="dist/app/js/helpers/authentication.factory.js"></script>
+    <script src="dist/app/js/helpers/cortana.factory.js"></script>
+    <script src="dist/app/js/helpers/device.factory.js"></script>
+    <script src="dist/app/js/helpers/fragment.factory.js"></script>
+    <script src="dist/app/js/helpers/navigation.factory.js"></script>
+    <script src="dist/app/js/helpers/promise.factory.js"></script>
+    <script src="dist/app/js/helpers/sidebar.factory.js"></script>
+    <script src="dist/app/js/helpers/cache.factory.js"></script>
+    <script src="dist/app/js/helpers/common.factory.js"></script>
+
+    <!--WIDGET DEFINTIONS-->
+    <script src="dist/app/js/widgets/definitions/widget_defn_101.js"></script>
+    <script src="dist/app/js/widgets/definitions/widget_defn_102.js"></script>
+    <script src="dist/app/js/widgets/definitions/widget_defn_103.js"></script>
+    <script src="dist/app/js/widgets/definitions/widget_defn_104.js"></script>
+    <script src="dist/app/js/widgets/definitions/widget_defn_302.js"></script>
+
+    <!-- Models -->
+    <script src="dist/app/js/models/models.js"></script>
+
+    <!-- Controllers -->
+    <script src="dist/app/js/controllers/app.controller.js"></script>
+    <script src="dist/app/js/controllers/deal.controller.js"></script>
+    <script src="dist/app/js/controllers/dealdetails.controller.js"></script>
+    <script src="dist/app/js/controllers/widget.controller.js"></script>
+
+    <!-- Directives -->
+    <script src="dist/app/js/directives/deal.grid.directive.js"></script>
+    <script src="dist/app/js/directives/deal.accordion.directive.js"></script>
+    <script src="dist/app/js/directives/widget.generator.directive.js"></script>
+    <script src="dist/app/js/directives/packery.directive.js"></script>
+    <script src="dist/app/js/directives/typeahead.js"></script>
+    <script type="text/javascript">
+
+// IE9 fix
+        if (!window.console) {
+            var console = {
+                log: function () { },
+                warn: function () { },
+                error: function () { },
+                time: function () { },
+                timeEnd: function () { }
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+        var appInsights=window.appInsights||function(config){
+            function r(config){t[config]=function(){var i=arguments;t.queue.push(function(){t[config].apply(t,i)})}}var t={config:config},u=document,e=window,o="script",s=u.createElement(o),i,f;for(s.src=config.url||"//az416426.vo.msecnd.net/scripts/a/ai.0.js",u.getElementsByTagName(o)[0].parentNode.appendChild(s),t.cookie=u.cookie,t.queue=[],i=["Event","Exception","Metric","PageView","Trace"];i.length;)r("track"+i.pop());return r("setAuthenticatedUserContext"),r("clearAuthenticatedUserContext"),config.disableExceptionTracking||(i="onerror",r("_"+i),f=e[i],e[i]=function(config,r,u,e,o){var s=f&&f(config,r,u,e,o);return s!==!0&&t["_"+i](config,r,u,e,o),s}),t
+        }({
+            instrumentationKey: "86805683-24cc-4531-ab83-15fdeab58d2a"
+        });
+
+        window.appInsights=appInsights;
+        appInsights.trackPageView();
+    </script>
+
+
+</head>
+
+<body id="contentHost" class="container-fluid" ng-controller="AppController as app">
+    <div style="width:100%;height:100%;position:absolute;background:#25b678;top:0;left:0;z-index:999" ng-hide="appLoaded == true">
+        <label style="font-family:'Segoe UI';width:100%;text-align:center;display:block;font-size:40px;margin:calc(0.5 * (100vh - 100px)) 0;color:#fff;font-weight:100;">Authenticating ...</label>
+    </div>
+    <div class="row">
+        <div id="header">
+            <div class="icon-container" ng-click="app.sidebar.toggleSidebar()" ng-if="app.hideSideBarControls == false">
+                <i class="icon" ng-class="app.sidebar.isOpened ? 'icon-close' : 'icon-hamburger'"></i>
+            </div>
+            <div class="icon-container" ng-hide="app.device.isHardwareBackButtonPresent() || app.navigation.canGoBack() == false" ng-class="{'disabled': !app.navigation.canGoBack()}" ng-click="app.navigation.goBack()">
+                <i class="icon icon-back"></i>
+            </div>
+            <div class="title" go-to="home">MOJA</div>
+            <div class="pull-right">
+                <div class="profile">
+                    <div class="details">
+                        <p ng-show="userInfo.profile" ng-cloak>{{ userInfo.profile.name }}</p><!--For web-->
+                        <small ng-cloak>{{ userInfo.userName }}</small>
+                    </div>
+                <div class="icon-container">
+                        <i ng-hide="userInfo.thumbnailPhoto" class="icon icon-user"></i>
+                        <img class="icon iconDisplayImage" ng-csp ng-show="userInfo.thumbnailPhoto" ng-src="data:image/jpeg;base64,{{userInfo.thumbnailPhoto}}" />
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <win-split-view closed-display-mode="app.sidebar.closedDisplayMode" opened-display-mode="app.sidebar.openedDisplayMode" pane-opened="app.sidebar.isOpened">
+            <win-split-view-pane>
+                <div ng-include="'dist/app/js/templates/sidebar.html'"></div>
+            </win-split-view-pane>
+            <win-split-view-content>
+                <div id="contentHost" class="container-fluid ui-view-container">
+                    <div class="row">
+                        <div class="progressArea" ng-show="app.device.progress.isShown">
+                            <div class="overlay">
+                        <div class="center-block ">
+                                    <img class="loading" src="assets/loading_new.GIF" />
+                            <p>{{ app.device.progress.message }}</p>
+                        </div>
+                    </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-class="{ 'inProgress': app.device.progress.isShown}" ui-view></div>
+                </div>
+            </win-split-view-content>
+        </win-split-view>
+    </div>
+</body>
+</html>

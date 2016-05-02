@@ -1,0 +1,23 @@
+﻿# Don't ignore .gitignore
+!.gitignore
+
+# Ignore bin
+bin/**
+
+# Ignore bld
+bld/**
+
+# Ignore node_modules
+node_modules/**
+
+# Ignore bower_components
+bower_components/**
+
+# Ignore AppPackages
+AppPackages/**
+
+# Ignore VS Meta files
+/.vs/ProTrack/v14
+
+#Ignore lib
+dist/lib/**

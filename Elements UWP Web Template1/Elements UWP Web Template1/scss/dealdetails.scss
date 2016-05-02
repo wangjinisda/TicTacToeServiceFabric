@@ -1,0 +1,271 @@
+body {
+    		font-family: "Segoe UI";
+    	}
+/*selecdropdown List*/
+
+.search-dropdown {
+    margin: 0;
+    padding: 17px 10px 10px 10px;
+    border: 1px solid #A9A9A9;
+    position: absolute;
+    z-index: 99;
+    border-radius: 0 0 6px 6px;
+    border-top: none;
+    left: 0;
+    right: 0;
+    margin-top: -4px;
+	background: #fff;
+    max-height: 150px;
+    overflow-y: auto;
+    top: 4px;
+}
+
+.wrapsearch {
+    position: relative;
+}
+.search-dropdown ul {
+    margin: 0;
+    padding: 0;
+
+}
+ul.search-dropdown::after {
+    border-top: 1px solid #A9A9A9;
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    top: 0;
+}
+.search-dropdown li {
+    margin: 0;
+    padding: 5px 0 5px 0;
+    list-style: none;
+    font-family: 'Corbel';
+    font-weight: normal;
+    font-size: 20px;
+    
+}
+.search-dropdown li a {
+    color: #58585a !important;
+}
+.activeListItem {
+    background-color: #428BCA;
+}
+.customTypeAhead {
+    position: relative;
+}
+.search-dropdown li:focus,
+.search-dropdown li a:focus {
+    outline: none;
+}
+.container {
+            width: 1366px;
+        }
+        .modal {
+            display: block;
+        }
+        .modal-header .close {
+            margin-top: -9px;
+        }
+.datepickerwrap {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+} 
+.wrap-picker {
+    margin-bottom: 0px;
+    thead tr:nth-child(2) th {
+        padding: 10px;
+    }
+    .input-group-btn .btn {
+        background-image: none;
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+    }
+}
+.wrap-deal-details {
+    padding-top: 15px;
+    margin-left: -15px;
+
+    input {
+        border: none;
+        background-color: transparent;
+        height: 26px;
+        width: 100%;
+    }
+
+    select {
+        border: none;
+        background-color: transparent;
+        width: 100%;
+        height: 26px;
+    }
+}
+
+.dealDetailsMain {
+    overflow: hidden;
+}
+
+.wrapdeal-left {
+    height: calc(100vh - 50px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.deal-details {
+    .wrapDealSection {
+        font-weight: 600;
+        font-size: 18px;
+        margin-top: 10px;
+        line-height: 1.1px;
+
+        &.validationFailed{
+            border:2px solid #e74c3c;
+        }
+        
+    }
+    button.salesAppStyle.active {
+        background: #107654;
+        color: #fff;
+        border: 2px solid #107654;
+    }
+
+    button.salesAppStyle {
+        background: #107654;
+        color: #fff;
+        border: 2px solid #107654;
+    }
+
+    button.salesAppStyle {
+        padding: 10px 15px;
+        min-width: 100px;
+        font-family: 'Segoe UI';
+        font-weight: 100;
+        font-size: medium;
+        border-radius: 0;
+        border: 2px solid #107654;
+        background: #fff;
+        color: #107654;
+        box-shadow: none;
+        margin-top: 15px;
+        margin-right: 15px;
+    }
+
+    .detail-left {
+        .wrapProductSection {
+            padding-left: 15px;
+
+           .icon-smaller {
+               font-size: 1em;
+               padding: 0px 8px;
+           }
+
+            h2 {
+                padding-bottom: 10px;
+            }
+
+            td {
+                border-bottom: 1px solid #ddd;
+                border-top: none;
+                color: #222;
+                font-size: 16px;
+                font-weight: normal;
+            }
+
+            th {
+                border-top: none;
+                border-bottom: solid 2px #A8CB93;
+                padding-bottom: 20px;
+                font-weight: 500;
+            }
+
+            .addProductRow td {
+                border: none;
+                background-color: #f1f1f1;
+            }
+
+            .addProduct {
+                color: #037553;
+                font-weight: bold;
+                border-bottom: none;
+            }
+
+            .emptyHeader {
+                width: 10%;
+            }
+
+            .columnQuantity {
+                width: 20%;
+
+                input {
+                    width: 50%;
+                }
+            }
+
+            .columnPrice {
+                width: 20%;
+
+                input {
+                    width: 50%;
+                }
+            }
+
+            .columnTotal {
+                width: 20%;
+                padding-right: 20px;
+            }
+        }
+
+        .productsList {
+            color: #525252;
+            font-weight: 100;
+        }
+
+        h2 {
+            color: #151e2d;
+            font-weight: 400;
+            font-size: 25px;
+        }
+
+         h3 {
+            padding: 5px 10px 0px 15px;
+            color: #6D6D6D;
+            font-weight: 400;
+            font-size: 22px;
+            margin-bottom: 0px;
+        }
+
+        .info {
+            padding-bottom: 20px;
+
+            label {
+                font-size: small;
+                font-weight: 500;
+                margin-bottom: 5px;
+                text-transform: uppercase;
+                color: #303030;
+                font-family: 'Segoe UI';
+                width: 100%;
+
+                .reqd {
+                    color: #ff0000;
+                    line-height: 10px;
+                    font-size: large;
+                }
+            }
+
+            .details-content {
+                margin-bottom: 0;
+                font-weight: 100;
+                font-size: x-large;
+                text-transform: none;
+            }
+
+            .content {
+                background: #EFEFEF;
+                padding: 8px;
+            }
+        }    
+    }        
+}        

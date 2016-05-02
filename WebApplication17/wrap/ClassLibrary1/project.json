@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "dnx451": {
+      "bin": {
+        "assembly": "C:\\Users\\nelvarg\\Documents\\Visual Studio 2015\\Projects\\WebApplication17\\ClassLibrary1\\bin\\Debug\\ClassLibrary1.dll",
+        "pdb": "C:\\Users\\nelvarg\\Documents\\Visual Studio 2015\\Projects\\WebApplication17\\ClassLibrary1\\bin\\Debug\\ClassLibrary1.pdb"
+      }
+    }
+  }
+}

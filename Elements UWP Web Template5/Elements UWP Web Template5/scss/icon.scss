@@ -1,0 +1,182 @@
+﻿@import 'vars.scss';
+
+.icon-container {
+    outline: none;
+    border: 0;
+    width: auto;
+    display: block;
+    float: left;
+    min-width: 0;
+    min-height: 0;
+    font-size: em(20px);
+    padding: 0 14px;
+    background-color: transparent;
+
+    span {
+        margin-left: 10px;    
+        position: relative;
+        top: -3px; /* fix for improper positioning */        
+    }
+
+    @include focus-states();    
+}
+
+.icon {
+    font-family: "SegoeUI MDL2 Assets";
+    font-weight: normal;
+    font-style: normal;
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    &.icon-notification:before {
+        content: "\E91C";
+    }
+
+    &.icon-back:before {
+        content: "\E112";
+    }
+
+    &.icon-close:before {
+        content: "\E10A";
+    }
+
+    &.icon-hamburger:before {
+        content: "\E700";
+    }
+
+    &.icon-search:before {
+        content: "\E1A3";
+    }
+    &.icon-search-right:before {
+         content: "\E094";
+    }
+    &.icon-user:before {
+        content: "\E2AF";
+    }
+
+    &.icon-settings:before {
+        content: "\E713";
+    }
+
+    &.icon-chevron-up:before {
+        content: "\E09C";
+    }
+
+    &.icon-chevron-down:before {
+        content: "\E09D";
+    }
+
+    &.icon-chevron-right:before {
+        content: "\E00F";
+    }
+
+    &.icon-star:before {
+        content: "\E1CE";
+    }
+
+    &.icon-star-filled:before {
+        content: "\E1CF";
+    }
+
+    &.icon-basket:before {
+        content: "\E821";
+    }
+
+    &.icon-pipe:before {
+        content: "\E17B";
+    }
+
+    &.icon-accept:before {
+        content: "\E001";
+    }
+
+    &.icon-pipe-health:before {
+        content: "\E17A";
+    }
+
+    &.icon-bulb:before {
+        content: "\E82F";
+    }
+
+    &.icon-alert:before {
+        content: "\E1DE";
+    }
+
+    &.icon-eye:before {
+        content: "\E052";
+    }
+
+    &.icon-square:before {
+        content: "\E25E";
+    }
+
+    &.icon-circle:before {
+        content: "\EC14";
+    }
+
+    &.icon-home:before {
+        content: "\E10F";
+    }
+
+    &.icon-apps:before {
+        content: "\E74C";
+    }
+
+    &.icon-pointer:before {
+        content: "\E1E3"
+    }
+
+    &.icon-next:before {
+        content: "\E0AB"
+    }
+
+    &.icon-devices:before {
+        content: "\E70C"
+    }
+
+    &.icon-clock:before {
+        content: "\E823"
+    }
+
+    &.icon-collapse:before {
+        content: "\E92C"
+    }
+    
+    &.icon-book:before {
+        content: "\E82D";
+    }
+
+    &.icon-calender:before {
+        content: "\E163";
+    }
+    &.icon-grid:before{
+        content:"\E80A";
+    }
+    &.icon-filter:before {
+        content:"\E16E";
+    }
+    &.icon-chevron-down:before {
+        content:"\E011";
+    }
+    &.icon-glyph-499:before {
+        content: "\E878";
+    }
+    &.icon-refresh:before{
+        content:"\E72C";
+    }
+    &.icon-save:before {
+        content: "\E74E";
+    }
+     &.icon-edit:before {
+        content: "\E70F";
+    }
+     &.icon-delete:before {
+        content: "\E74D";
+    }
+}
+
+

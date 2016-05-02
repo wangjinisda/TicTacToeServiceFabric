@@ -1,0 +1,303 @@
+.widgetDashboard .tile .tileContent.addNew .icon, .widgetDashboard .tile .tileContent.addNew .title {
+  color: #909090;
+  text-align: center;
+  width: 100%; }
+
+.progressArea {
+  width: 100%;
+  display: block;
+  position: relative;
+  z-index: 301; }
+  .progressArea .collapse {
+    top: 15px; }
+  .progressArea .overlay {
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    z-index: 30;
+    background-color: rgba(1, 1, 1, 0.03);
+    display: block; }
+    .progressArea .overlay .center-block {
+      width: 100%;
+      margin: calc(0.20 * (100% - 140px)) 0; }
+      .progressArea .overlay .center-block img.loading {
+        display: block;
+        margin: 0 auto; }
+      .progressArea .overlay .center-block p {
+        text-align: center;
+        font-family: 'Segoe UI';
+        font-size: large;
+        margin-top: 30px; }
+
+.widgetDashboard .homeDash {
+  overflow-y: auto;
+  overflow-x: hidden; }
+
+.widgetDashboard .tilesCenter {
+  padding: 5px;
+  margin: 5px 0; }
+
+.widgetDashboard .tile {
+  background: none;
+  padding: 5px;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  -moz-transition: all 0.2s linear 0s;
+  -o-transition: all 0.2s linear 0s;
+  -webkit-transition: all 0.2s linear 0s;
+  transition: all 0.2s linear 0s; }
+  .widgetDashboard .tile .tileContent {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    position: relative; }
+    .widgetDashboard .tile .tileContent.addNew {
+      border: 4px solid #dde2e6;
+      background: none; }
+      .widgetDashboard .tile .tileContent.addNew .titleAndSettingsHolder .titleHolder {
+        width: 100%;
+        margin-top: 30%; }
+    .widgetDashboard .tile .tileContent .primeContent {
+      width: 100%;
+      height: calc(100% - 42px);
+      background-position: 0 -35px;
+      background-repeat: no-repeat;
+      cursor: pointer; }
+      .widgetDashboard .tile .tileContent .primeContent img.primeImg {
+        width: 100%;
+        height: 100%; }
+      .widgetDashboard .tile .tileContent .primeContent .deal-count {
+        font-size: 30px;
+        font-weight: 400;
+        color: #86BA65;
+        margin: auto; }
+      .widgetDashboard .tile .tileContent .primeContent .footer-count {
+        margin-top: 35px; }
+    .widgetDashboard .tile .tileContent .titleAndSettingsHolder {
+      width: 100%;
+      height: 42px;
+      padding: 5px 5px 5px 10px; }
+      .widgetDashboard .tile .tileContent .titleAndSettingsHolder .titleHolder {
+        line-height: 32px;
+        width: calc(100% - 32px);
+        float: left; }
+        .widgetDashboard .tile .tileContent .titleAndSettingsHolder .titleHolder .title {
+          font-family: 'Segoe UI';
+          font-weight: 500;
+          font-size: small;
+          text-transform: uppercase; }
+      .widgetDashboard .tile .tileContent .titleAndSettingsHolder .settingsHolder {
+        width: 32px;
+        height: 32px;
+        text-align: center;
+        display: inline-block; }
+        .widgetDashboard .tile .tileContent .titleAndSettingsHolder .settingsHolder .icon {
+          font-size: 18px;
+          line-height: 32px;
+          margin: 0 auto;
+          vertical-align: top; }
+    .widgetDashboard .tile .tileContent.visibilityHide {
+      visibility: hidden; }
+    .widgetDashboard .tile .tileContent.noHeader .primeContent {
+      height: 100%;
+      background-position-y: 0; }
+    .widgetDashboard .tile .tileContent.flipView.second.flipNoHeader .primeContent {
+      height: 100%;
+      background-position: 0 0; }
+  .widgetDashboard .tile.tile1x1 {
+    width: 180px;
+    height: 180px; }
+  .widgetDashboard .tile.tile1x2 {
+    width: 370px;
+    height: 180px; }
+  .widgetDashboard .tile.tile2x2 {
+    width: 370px;
+    height: 370px; }
+  .widgetDashboard .tile.tile2x4 {
+    width: 750px;
+    height: 370px; }
+  .widgetDashboard .tile.tile2x6 {
+    width: 1130px;
+    height: 370px; }
+  .widgetDashboard .tile .settingsIconholder {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    z-index: 200; }
+    .widgetDashboard .tile .settingsIconholder .settingsHolder {
+      padding: 5px; }
+    .widgetDashboard .tile .settingsIconholder.ddOpen {
+      z-index: 300; }
+  .widgetDashboard .tile .absPosContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    overflow: hidden; }
+  .widgetDashboard .tile .titleAndSettingsHolder.onlySettings {
+    position: absolute;
+    width: auto;
+    right: 5px; }
+
+.widgetDashboard .settingsDropDown button.btn-primary.dropdown-toggle {
+  min-width: 32px;
+  line-height: 40px;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0; }
+  .widgetDashboard .settingsDropDown button.btn-primary.dropdown-toggle[disabled] {
+    cursor: none;
+    pointer-events: none;
+    opacity: 1; }
+
+.widgetDashboard .settingsDropDown.open button.btn-primary.dropdown-toggle {
+  background: #334157;
+  color: #fff; }
+
+.widgetDashboard .settingsDropDown ul.dropdown-menu {
+  right: 0;
+  left: auto;
+  margin-top: 0;
+  background: #334157;
+  border-radius: 0;
+  color: #fff;
+  min-width: 175px; }
+  .widgetDashboard .settingsDropDown ul.dropdown-menu li.divider {
+    background: #a0a0a0;
+    margin: 8px auto;
+    width: 80%; }
+  .widgetDashboard .settingsDropDown ul.dropdown-menu li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 15px;
+    line-height: 35px; }
+    .widgetDashboard .settingsDropDown ul.dropdown-menu li a:hover {
+      background: #334157; }
+    .widgetDashboard .settingsDropDown ul.dropdown-menu li a .icon {
+      margin-right: 15px !important; }
+  .widgetDashboard .settingsDropDown ul.dropdown-menu li.resizers a {
+    display: inline-block;
+    color: #fff;
+    width: 50px;
+    text-decoration: none;
+    padding: 5px;
+    line-height: 35px; }
+    .widgetDashboard .settingsDropDown ul.dropdown-menu li.resizers a.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+      cursor: not-allowed; }
+    .widgetDashboard .settingsDropDown ul.dropdown-menu li.resizers a:first-child {
+      margin-left: 5px; }
+    .widgetDashboard .settingsDropDown ul.dropdown-menu li.resizers a.active {
+      background: #25b768;
+      color: #fff; }
+    .widgetDashboard .settingsDropDown ul.dropdown-menu li.resizers a img {
+      margin: 0 auto;
+      display: block;
+      width: 32px; }
+    .widgetDashboard .settingsDropDown ul.dropdown-menu li.resizers a label {
+      margin: 0 auto;
+      display: block;
+      text-align: center;
+      line-height: 25px; }
+
+.widgetDashboard ul {
+  list-style: none; }
+
+.widgetDashboard .layout-col {
+  display: inline-flex; }
+
+.widgetDashboard .tileContainer {
+  display: flex;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-align-content: flex-start;
+  -webkit-align-content: flex-start;
+  align-content: flex-start; }
+
+#content.widgetDashboard {
+  overflow-y: auto;
+  width: 100%; }
+
+.background-container {
+  /*background: url('../../assets/images/DashboardBG.png') bottom left repeat-x;*/
+  background-color: #e9eef1;
+  background-attachment: scroll; }
+
+.dashboard-container {
+  padding: 30px 15px 0; }
+  .dashboard-container .tile-container {
+    padding-bottom: 0;
+    margin-bottom: 0; }
+    .dashboard-container .tile-container > p {
+      font-size: 16pt;
+      color: #666666;
+      font-weight: 200; }
+    .dashboard-container .tile-container > .ng-enter-stagger {
+      transition-delay: 0.1s;
+      transition-duration: 0s; }
+    .dashboard-container .tile-container .tile {
+      width: 100%;
+      background: #EFEFEF;
+      display: inline-block;
+      float: left;
+      min-height: 200px;
+      position: relative;
+      margin-bottom: 30px;
+      padding: 15px;
+      -webkit-transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease; }
+      .dashboard-container .tile-container .tile:active, .dashboard-container .tile-container .tile:hover {
+        background: #24B767;
+        cursor: pointer; }
+      .dashboard-container .tile-container .tile:active {
+        background: #24B767;
+        -moz-transform: scale(0.98, 0.98);
+        -ms-transform: scale(0.98, 0.98);
+        -o-transform: scale(0.98, 0.98);
+        -webkit-transform: scale(0.98, 0.98);
+        transform: scale(0.98, 0.98); }
+      .dashboard-container .tile-container .tile.disabled {
+        opacity: 0.6; }
+        .dashboard-container .tile-container .tile.disabled:active, .dashboard-container .tile-container .tile.disabled:hover {
+          background: transparent; }
+        .dashboard-container .tile-container .tile.disabled:active {
+          -moz-transform: none;
+          -ms-transform: none;
+          -o-transform: none;
+          -webkit-transform: none;
+          transform: none; }
+      .dashboard-container .tile-container .tile:hover, .dashboard-container .tile-container .tile:focus {
+        color: #FFFFFF; }
+        .dashboard-container .tile-container .tile:hover h2, .dashboard-container .tile-container .tile:focus h2 {
+          color: #FFFFFF; }
+        .dashboard-container .tile-container .tile:hover p.name, .dashboard-container .tile-container .tile:focus p.name {
+          color: #F2F2F2; }
+        .dashboard-container .tile-container .tile:hover p.id, .dashboard-container .tile-container .tile:focus p.id {
+          color: #E6E6E6; }
+      .dashboard-container .tile-container .tile:nth-child(4n+4) {
+        margin-right: 0; }
+      .dashboard-container .tile-container .tile p {
+        display: block;
+        font-weight: normal;
+        margin: 0;
+        padding: 0; }
+        .dashboard-container .tile-container .tile p.name {
+          color: #4d4d4d; }
+        .dashboard-container .tile-container .tile p.id {
+          font-style: italic;
+          color: #8e8e8e; }
+      .dashboard-container .tile-container .tile > div {
+        position: absolute;
+        display: block;
+        bottom: 15px; }
+
+.tile-group-title {
+  color: #B8B8B8;
+  padding-left: 5px; }

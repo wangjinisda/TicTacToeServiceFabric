@@ -1,0 +1,106 @@
+﻿$header-background: #25b768;
+$header-background-hover: #1e9555;
+$header-subtle: #6fb28a;
+$header-foreground: #d3f1e1;
+
+$sidebar-background: #111c26;
+$sidebar-foreground: #e5e6e7;
+$sidebar-subtle-background: #454d56;
+$sidebar-subtle-foreground: #9fa1a3;
+$sidebar-active-background: #1f8853;
+$sidebar-active-foreground: #FFFFFF;
+$sidebar-active-action: #1f8853;
+
+$content-subtle-foreground: #666666;
+$content-subtle-background: #EFEFEF;
+$color-tile-id: #8e8e8e;
+$color-tile-name: #4d4d4d;
+$content-highlight-foreground: #24B767;
+
+$content-background: #FFFFFF;
+$content-foreground: #222222;
+$base-font-size: 16px;
+
+@function em($px, $base: $base-font-size) {
+    @return ($px / $base) * 1em;
+}
+
+@mixin focus-states($color: null) {
+    @if($color) {
+        &:active, &:hover {
+            background: $color;
+            cursor: pointer;
+        }
+
+        &:active {
+            background: $color;
+            -moz-transform: scale(0.98, 0.98);
+            -ms-transform: scale(0.98, 0.98);
+            -o-transform: scale(0.98, 0.98);
+            -webkit-transform: scale(0.98, 0.98);
+            transform: scale(0.98, 0.98);
+        }
+
+        &.disabled {
+            opacity: 0.6;
+
+            &:active, &:hover {
+                background: transparent;
+            }
+
+            &:active {
+                -moz-transform: none;
+                -ms-transform: none;
+                -o-transform: none;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+    }
+    @else {
+        &:active, &:hover {
+            background: rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        &:active {
+            background: rgba(0,0,0,0.2);
+            -moz-transform: scale(0.98, 0.98);
+            -ms-transform: scale(0.98, 0.98);
+            -o-transform: scale(0.98, 0.98);
+            -webkit-transform: scale(0.98, 0.98);
+            transform: scale(0.98, 0.98);
+        }
+
+        &.disabled {
+            opacity: 0.6;
+
+            &:active, &:hover {
+                background: transparent;
+                cursor: default;
+            }
+
+            &:active {
+                -moz-transform: none;
+                -ms-transform: none;
+                -o-transform: none;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+    }
+}
+
+$break-mob: 320px;
+$break-tablet:768px;
+$break-desktop: 1024px;
+
+
+@mixin respond-to($media) {
+    @if $media == tablet {
+  	    @media only screen and (min-width:$break-tablet) and (max-width:$break-desktop - 1) { @content; }
+    }
+    @else if $media == mobile {
+  	    @media only screen and (min-width:$break-mob) and (max-width:$break-tablet - 1) { @content; }
+    }
+}

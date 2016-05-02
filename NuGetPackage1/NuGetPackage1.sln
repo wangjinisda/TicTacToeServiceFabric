@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "NuGetPackage1", "NuGetPackage1\NuGetPackage1.nuproj", "{B689E562-867C-4705-A436-01653F72759A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B689E562-867C-4705-A436-01653F72759A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B689E562-867C-4705-A436-01653F72759A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B689E562-867C-4705-A436-01653F72759A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B689E562-867C-4705-A436-01653F72759A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

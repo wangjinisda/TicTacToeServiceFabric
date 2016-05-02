@@ -1,0 +1,990 @@
+﻿@import 'vars.scss';
+@import 'widgets.scss';
+@import 'dealmembers.scss';
+@import 'dealdocuments.scss';
+@import 'dealdetails.scss';
+@import 'communication.scss';
+
+@font-face {
+    font-family: "SegoeUI MDL2 Assets";
+    src: url(/assets/fonts/SEGMDL2.TTF) format('truetype'), url(/assets/fonts/SEGMDL2.eot) format('embedded-opentype'), url(/assets/fonts/SEGMDL2.svg) format('svg'), url(/assets/fonts/SEGMDL2.woff) format('woff');
+}
+
+/* Include this file in your html if you are using the CSP mode. */
+
+@charset "UTF-8";
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak],
+.ng-cloak, .x-ng-cloak,
+.ng-hide:not(.ng-hide-animate) {
+    display: none !important;
+}
+
+ng\:form {
+    display: block;
+}
+
+.ng-animate-shim {
+    visibility: hidden;
+}
+
+.ng-anchor {
+    position: absolute;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font-family: "Segoe UI";
+    font-size: $base-font-size;
+    background: $content-background;
+    color: $content-foreground;
+
+    .row {
+        height: 100%;
+    }
+}
+
+#content-area {
+    height: 100%;
+}
+
+#wrapContentHost {
+    padding-bottom: 40px;
+}
+
+#header {
+    background-color: $header-background;
+    height: 48px;
+    overflow: hidden;
+    position: relative;
+
+    .title {
+        text-transform: uppercase;
+        font-size: em(17px);
+        line-height: 48px;
+        font-weight: 500;
+        color: $header-foreground;
+        display: block;
+        float: left;
+        margin-left: 14px;
+        cursor: pointer;
+    }
+
+    .icon-container {
+        color: $header-foreground;
+        line-height: 48px;
+
+        &.margin-fix {
+            margin-right: 20px;
+        }
+    }
+
+    .pull-right {
+        right: 0;
+        top: -48px /* height of the header */;
+    }
+}
+
+#content {
+    height: calc(100vh - 48px);
+    background: transparent top left no-repeat;
+    background-image: url(../../images/slide1.png);
+    background-size: contain;
+    background-position-x: -1%;
+
+    &.pipeline-mode {
+        background-image: url(../../images/slide4.png);
+    }
+}
+
+#hero {
+    position: relative;
+    height: 225px;
+    background: transparent no-repeat center center;
+    background-size: cover;
+    background-image: url("../../assets/other/WIN12_Muji_HP_03.jpg");
+
+    .overlay {
+        position: absolute;
+        background: #181931;
+        opacity: 0.45;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .content {
+        display: block;
+        color: rgba(255,255,255,0.8);
+        position: absolute;
+        bottom: 50px;
+        font-size: 14pt;
+
+        .icon-container {
+            font-size: 13pt;
+            padding: 0;
+
+            span {
+                margin-left: 0;
+                margin-right: 15px;
+                float: left;
+                text-transform: uppercase;
+                font-weight: 800;
+                top: -1px;
+            }
+
+            @include focus-states(transparent);
+        }
+    }
+
+    .action,
+    .notification {
+        position: absolute;
+        width: 225px;
+        height: 225px;
+        top: 0;
+        right: 225px;
+        color: rgba(255,255,255,0.8);
+        padding: 15px;
+        padding-top: 15px;
+        background-color: rgba(80, 83, 170, 0.8);
+        cursor: pointer;
+
+        h1 {
+            text-align: center;
+            clear: both;
+            font-size: 64pt;
+            font-weight: 100;
+        }
+
+        .icon-container {
+            font-size: 13pt;
+            padding: 0;
+
+            .icon {
+                font-size: 30pt;
+                clear: both;
+            }
+
+            p {
+                display: inline-block;
+                text-transform: uppercase;
+                font-weight: 800;
+                top: -1px;
+                text-align: left;
+            }
+
+            @include focus-states(transparent);
+        }
+    }
+
+    .action {
+        right: 0;
+        background-color: rgba(55, 155, 180, 0.8);
+    }
+}
+
+
+#filters {
+    background: $content-background;
+    padding: 15px;
+    height: 52px;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    ul {
+        margin: 0;
+        padding: 0;
+        width: 1300px;
+
+        li {
+            display: inline-block;
+            color: $content-foreground;
+            margin-right: 30px;
+            text-transform: uppercase;
+            font-weight: 500;
+            opacity: 0.4;
+            -moz-transition: opacity 0.2s ease;
+            -o-transition: opacity 0.2s ease;
+            -webkit-transition: opacity 0.2s ease;
+            transition: opacity 0.2s ease;
+
+            &.active {
+                opacity: 1;
+                color: #6bbe51;
+            }
+
+            @include focus-states(transparent);
+        }
+    }
+}
+
+@media (min-width: 320px) and (max-width: 640px) {
+    #hero {
+        height: 180px;
+        background: transparent no-repeat center center;
+        background-size: cover;
+        background-image: url("../../assets/other/WIN12_Muji_HP_03.jpg");
+
+        .content {
+            position: relative;
+            bottom: auto;
+            margin-top: 10px;
+        }
+    }
+}
+
+#themeRoller {
+    width: 100%;
+    height: 100%;
+
+    img {
+        width: 100%;
+    }
+}
+
+.notificationArea {
+    width: 100%;
+    display: block;
+    position: relative;
+    z-index: 301;
+
+    .collapse {
+        top: 15px;
+    }
+
+    .overlay {
+        position: absolute;
+        height: 100vh;
+        width: 100%;
+        z-index: 30;
+        background-color: rgba(0,0,0,0.8);
+        display: block;
+    }
+
+    &.notifications {
+        .actionMenu {
+            .actionItem {
+                .product {
+                    .name {
+                        color: #25b768;
+                    }
+                }
+
+                .time {
+                    .name {
+                        text-transform: none;
+                        font-style: italic;
+                    }
+                }
+            }
+        }
+    }
+
+    .actionMenu {
+        background-color: #1e2d3b;
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 15px;
+        z-index: 31;
+        max-height: 100vh;
+        overflow: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 100%;
+
+        h4 {
+            color: #25b768;
+            text-transform: uppercase;
+            font-weight: 500;
+            font-size: 11pt;
+            margin-bottom: 40px;
+        }
+
+        .icon-container {
+            position: absolute;
+            right: 0;
+
+            .icon {
+                color: #25b768;
+            }
+        }
+
+        .actionContainer {
+            padding-bottom: 30px;
+            overflow: auto;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .actionItem {
+            max-width: 300px;
+            color: $sidebar-foreground;
+            font-size: 10pt;
+            display: inline-block;
+            margin-right: 50px;
+            margin-bottom: 50px;
+            vertical-align: top;
+
+            a {
+                text-decoration: none;
+            }
+
+            p {
+                color: #fff;
+                text-decoration: none;
+            }
+
+            .product {
+                display: inline-block;
+
+                .image {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 100%;
+                    background: transparent center center no-repeat;
+                    background-size: contain;
+                    display: inline-block;
+                    margin-right: 10px;
+                    position: relative;
+                    top: 5px;
+                }
+
+                .name {
+                    display: inline-block;
+                    font-size: 10pt;
+                    text-transform: uppercase;
+                    color: #fff;
+                    text-decoration: none;
+                }
+            }
+
+            .time {
+                position: relative;
+                display: inline-block;
+
+                .icon-container {
+                    position: relative;
+                    font-size: 12pt;
+
+                    .icon {
+                        color: #25b768;
+                    }
+                }
+
+                .name {
+                    display: inline-block;
+                    font-size: 10pt;
+                    text-transform: uppercase;
+                    color: #fff;
+                    text-decoration: none;
+                }
+            }
+
+            .actions {
+                a,
+                button {
+                    outline: none;
+                    text-decoration: none;
+                    color: $sidebar-foreground;
+                    border: none;
+                    margin-top: 15px;
+                    margin-right: 10px;
+                    text-transform: uppercase;
+                    font-weight: 500;
+                    font-size: 8pt;
+                    padding: 4px 7px;
+                    background-color: rgb(30, 45, 59);
+
+                    &.action-primary {
+                        background-color: #25b768;
+                        cursor: pointer;
+                    }
+
+                    &:hover {
+                        background-color: #189752;
+
+                        &.action-secondary {
+                            background-color: rgb(23, 36, 48);
+                        }
+                    }
+
+                    &:active {
+                        background-color: #111c26;
+                        -moz-transform: scale(0.98, 0.98);
+                        -ms-transform: scale(0.98, 0.98);
+                        -o-transform: scale(0.98, 0.98);
+                        -webkit-transform: scale(0.98, 0.98);
+                        transform: scale(0.98, 0.98);
+                    }
+                }
+            }
+        }
+
+        @media only screen and (min-width : 320px) and (max-width: 768px) {
+            .actionItem {
+                max-width: none;
+                width: auto;
+                margin-right: 0;
+            }
+        }
+    }
+}
+
+.webView {
+    width: 100%;
+    height: calc(100vh - 48px);
+}
+
+
+/* Shafeeque */
+.deal-header {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    .deal-head {
+        font-size: 22px;
+        font-weight: 500;
+        margin-left: 20px;
+
+        @include respond-to(mobile) {
+            font-size: 16px;
+            font-weight: 500;
+        }
+    }
+
+    .saved-searches {
+        display: inline;
+        float: right;
+        padding-top: 5px;
+        margin-right: -40px;
+
+        @include respond-to(mobile) {
+            padding-top: 0;
+        }
+
+        span {
+            display: inline;
+            font-weight: 700;
+            color: #818181;
+            font-size: 12px;
+
+            @include respond-to(mobile) {
+                font-size: 10px;
+            }
+        }
+
+        .icon {
+            padding: 5px;
+        }
+    }
+
+    .filter-btn {
+        display: inline;
+        float: right;
+
+        @include respond-to(mobile) {
+            font-size: 10px;
+        }
+
+        button {
+            background: black none repeat scroll 0% 0%;
+            border: medium none;
+            color: #FFF;
+        }
+
+        .icon-filter {
+            padding: 7px;
+
+            @include respond-to(mobile) {
+                padding: 5px;
+            }
+        }
+
+        .btn-label {
+            font-size: 12px;
+            padding: 6px;
+            float: right;
+
+            @include respond-to(mobile) {
+                font-size: 11px;
+                padding: 3px;
+            }
+        }
+    }
+}
+
+.deal-tab {
+    .win-pivot-header {
+        font-size: 15px;
+        font-weight: 300;
+    }
+
+    .win-pivot-header-items {
+        background: #E9EEF1;
+        margin-bottom: 10px;
+    }
+
+    .win-pivot {
+        .win-pivot-header.win-pivot-header {
+            margin-top: 5px;
+            font-size: 18px;
+        }
+
+        .win-pivot-headers {
+            height: 50px;
+            padding-left: 12px;
+        }
+
+        .win-pivot-navbutton {
+            top: 3px;
+        }
+
+        button.win-pivot-header.win-pivot-header-selected {
+            color: #28B364;
+            font-weight: 600;
+        }
+    }
+
+    .win-pivot-header, .win-pivot .win-pivot-header.win-pivot-header:hover:active {
+        height: 39px !important;
+        font-size: 16px;
+        margin-top: 5px;
+    }
+
+    .dealTable {
+        font-size: 12px;
+        width: 100%;
+
+        th {
+            padding: 6px;
+        }
+
+        td {
+            padding: 9px !important;
+        }
+
+        tr {
+            border-bottom: 1px solid #ebebeb;
+        }
+
+        thead tr:first-child {
+            border-bottom: 2px solid #9B9B9B;
+        }
+
+        .icon-edit {
+            color: #000;
+        }
+
+        .col-10 {
+            width: 10%;
+            padding-right:30px !important;
+        }
+
+        .col-12 {
+            width: 12%;
+        }
+
+        .col-16 {
+            width: 17%;
+        }
+
+        .col-9 {
+            width: 9%;
+        }
+
+        .col-5 {
+            width: 5%;
+        }
+    }
+
+    .row-single {
+
+        @include respond-to(mobile) {
+            font-size: 12px !important;
+            padding-top: 15px;
+            padding-bottom: 10px;
+        }
+
+        td {
+            padding-left: 0 !important;
+            padding-top: 10px !important;
+            padding-bottom: 10px !important;
+        }
+
+        .add-btn {
+            @include respond-to(mobile) {
+                float: left;
+            }
+
+            a {
+                color: #027653;
+                font-weight: 700;
+                text-decoration: none;
+            }
+
+            .glyphicon {
+                padding-right: 4px;
+            }
+        }
+
+        .legend {
+            @include respond-to(mobile) {
+                float: right;
+            }
+
+            > .glyphicon-triangle-top {
+                color: #25B868;
+            }
+
+            > .glyphicon-stop {
+                color: #B22615;
+            }
+
+            > .glyphicon {
+                padding-left: 6px;
+                padding-right: 6px;
+
+                @include respond-to(mobile) {
+                    padding-left: 12px;
+                }
+            }
+
+            .legend-main {
+                @include respond-to(mobile) {
+                    padding-right: 4px;
+                }
+            }
+        }
+    }
+
+    .td-green .glyphicon {
+        color: #25B868;
+    }
+
+    .td-red .glyphicon {
+        color: #B22615;
+    }
+
+    .td-green {
+        background: #D2F1E1;
+    }
+
+    .td-red {
+        background: #F0D2D0;
+    }
+
+    .td-icons {
+        width: 15px;
+        padding-left: 24%;
+
+        @include respond-to(mobile) {
+            padding-left: 0;
+        }
+    }
+
+    .td-icons.glyphicon {
+        padding: 0;
+    }
+
+    .legend-main {
+        font-weight: 700;
+        padding-right: 6px;
+    }
+}
+
+.deal-mobile {
+    .panel-group {
+        margin-top: 20px;
+    }
+
+    .panel-default > .panel-heading {
+        background-color: #EAEAE8;
+    }
+
+    .panel-heading {
+        border-radius: 0;
+
+        h4 {
+            font-weight: 300;
+        }
+    }
+
+    .panel {
+        border: none;
+    }
+
+    .panel-title a {
+        outline: none;
+    }
+
+    .acc-header {
+        font-size: 15px;
+    }
+
+    .panel.active > .panel-heading {
+        background: #24B767;
+        color: #FFF;
+    }
+
+    .acc-header-right {
+        padding-right: 0;
+    }
+
+    .panel-body {
+        padding-top: 5px;
+    }
+
+    .acc-data {
+        padding-bottom: 10px;
+    }
+
+    .acc-open {
+        font-size: 9px;
+        color: green;
+        border: 1px solid green;
+        padding: 2px;
+    }
+
+    .acc-data-head {
+        font-weight: 500;
+    }
+}
+
+html.win-hoverable .win-pivot button.win-pivot-header:hover {
+    margin-top: 5px;
+}
+
+.dashboard {
+    padding-top: 30px;
+
+    .dashboard-title {
+        font-size: 20px;
+        font-weight: 400;
+        padding-bottom: 4px;
+    }
+
+    .tiles {
+        background-color: #EAEAE8;
+        min-height: 185px;
+        margin-bottom: 15px;
+        padding: 10px;
+
+        .footer-count {
+            position: absolute;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        &.active {
+            background-color: #86BA65;
+            color: #FFF;
+        }
+
+        h5 {
+            font-weight: 600;
+        }
+    }
+
+    .tile-parent {
+        padding-right: 0px;
+    }
+
+    .unassigned-deal {
+        background: #FFF;
+        width: 67px;
+        height: 67px;
+        border-radius: 39px;
+        margin-top: 30px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 9px;
+        text-align: center;
+
+        .deal-count {
+            font-size: 30px;
+            font-weight: 400;
+            color: #86BA65;
+            margin: auto;
+        }
+    }
+}
+
+.win-splitview-content {
+    overflow: auto;
+}
+
+.progress {
+    text-align: center;
+    z-index: 9999;
+    position: absolute;
+    top: 0;
+    left: 15px;
+    width: 100%;
+    height: calc(100vh - 48px) !important;
+
+    p {
+        margin-top: 10px;
+        color: $content-subtle-foreground;
+    }
+
+    .center-block {
+        text-align: center;
+        margin-top: 250px;
+    }
+}
+
+.inProgress {
+    opacity: 0.20;
+}
+
+.errorContainer {
+    width: 100%;
+    padding-top:10vh;
+    height:calc(100vh - 48px);
+    background:#25b768;
+
+    img.errorPic {
+        display: block;
+        margin: 0 auto;
+        max-width:200px;
+        width:20vh;
+    }
+
+    p {
+        font-family: 'Segoe UI';
+        font-size: xx-large;
+        font-weight:100;
+        color: #fff;
+        padding: 15px;
+        text-align: center;
+
+        &.msg{
+            margin-top:15px;
+            font-size:medium;
+            font-weight:400;
+        }
+    }
+}
+
+//@extend-elements
+//original selectors
+//.profile .icon-container, .profile .details
+%extend_profile {
+	display: inline-block;
+	float: left;
+	text-align: right;
+	height: 48px;
+}
+
+
+.profile {
+	display: inline-block;
+	float: left;
+	text-align: right;
+	height: 48px;
+	border-right: 1px solid rgba(211, 241, 225, 0.25);
+	.details {
+		position: relative;
+		padding: 0 15px;
+		height: 48px;
+		@extend %extend_profile;
+		&.active {
+			background: #21a25c;
+			cursor: pointer;
+			//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+			transform: scale(0.98, 0.98);
+			background: #1c8d50;
+		}
+		&:active {
+			background: #21a25c;
+			cursor: pointer;
+			//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+			transform: scale(0.98, 0.98);
+			background: #1c8d50;
+		}
+		&:hover {
+			background: #21a25c;
+			cursor: pointer;
+		}
+		&.disabled {
+			opacity: 0.6;
+			&.active {
+				background: transparent;
+				//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+				transform: none;
+			}
+			&:active {
+				background: transparent;
+				//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+				transform: none;
+			}
+			&:hover {
+				background: transparent;
+			}
+		}
+	}
+	p {
+		color: #d3f1e1;
+		font-size: 11pt;
+		margin: 0;
+		padding: 0;
+		font-weight: 500;
+		position: relative;
+	}
+	small {
+		text-transform: uppercase;
+		color: #d3f1e1;
+		font-size: 9pt;
+		opacity: 0.7;
+		margin: 0;
+		padding: 0;
+	}
+	.icon-container {
+		@extend %extend_profile;
+		&.active {
+			background: #21a25c;
+			cursor: pointer;
+			//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+			transform: scale(0.98, 0.98);
+			background: #1c8d50;
+		}
+		&:active {
+			background: #21a25c;
+			cursor: pointer;
+			//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+			transform: scale(0.98, 0.98);
+			background: #1c8d50;
+		}
+		&:hover {
+			background: #21a25c;
+			cursor: pointer;
+		}
+		&.disabled {
+			opacity: 0.6;
+			&.active {
+				background: transparent;
+				//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+				transform: none;
+			}
+			&:active {
+				background: transparent;
+				//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+				transform: none;
+			}
+			&:hover {
+				background: transparent;
+			}
+		}
+	}
+}
+
+.txt-right {
+    text-align:right !important;
+}

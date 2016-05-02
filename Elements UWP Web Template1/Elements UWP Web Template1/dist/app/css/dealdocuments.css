@@ -1,0 +1,45 @@
+body {
+  font-family: "Segoe UI" !important; }
+
+.container {
+  width: 1366px; }
+
+.wrapDealDocuments {
+  padding-top: 20px; }
+
+.hr-line {
+  border-top: 1px solid #000 !important;
+  margin-left: 15px; }
+
+.documents-btns .btn {
+  background: #14202E;
+  border: 2px solid #14202E;
+  border-radius: 0;
+  margin-right: 10px;
+  float: left; }
+  .documents-btns .btn:hover {
+    border: 2px solid #14202E;
+    background: #fff;
+    color: #000; }
+
+.wrapDealBtns {
+  margin-left: 15px; }
+
+.deal-documents {
+  margin-left: 15px; }
+  .deal-documents .documents-area h2 {
+    margin-top: 0px; }
+  .deal-documents .documents-area p {
+    margin-top: 26px; }
+  .deal-documents .documents-area .hr-line {
+    margin-left: -15px; }
+  .deal-documents .documents-area .doc-about .doc-about-left {
+    float: left;
+    font-size: 2em;
+    padding-left: 0px; }
+  .deal-documents .documents-area .doc-about .icon-smaller {
+    font-size: 1.5em; }
+  .deal-documents .documents-area .doc-about .doc-about-right {
+    font-size: 12px; }
+    .deal-documents .documents-area .doc-about .doc-about-right .doc-head {
+      font-weight: bold; }

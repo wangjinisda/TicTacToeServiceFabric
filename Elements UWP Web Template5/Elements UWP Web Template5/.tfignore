@@ -1,0 +1,11 @@
+﻿#ignore unminified generated css
+\dist\app\css
+
+#Ignore lib
+\dist\lib\css\
+\dist\lib\fonts\
+\dist\lib\js\
+
+#ignore bower components
+\bower_components\
+\node_modules\

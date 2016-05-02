@@ -1,0 +1,87 @@
+{
+  "name": "bower",
+  "license": "Apache-2.0",
+  "private": true,
+  "dependencies": {
+    "angular": "^1.4.6",
+    "angular-winjs": "^4.3.0",
+    "angular-ui-router": "^0.2.15",
+    "angular-sanitize": "^1.4.6",
+    "angular-animate": "^1.4.6",
+    "angular-bootstrap": "^0.14.0",
+    "angular-datatables": "^0.4.3",
+    "angular-applicationinsights": "^0.2.5",
+    "bootstrap": "^3.3.5",
+    "DataTables": "^1.10.7",
+    "datatables-responsive": "^1.0.7",
+    "winjs": "^4.3.0",
+    "jquery": "1.x",
+    "underscore": "^1.8.3",
+    "angular-resource": "1.4.6",
+    "adal-angular": "^1.0.7"
+  },
+  "overrides": {
+    "jquery": {
+      "main": "dist/jquery.min.js"
+    },
+    "bootstrap": {
+      "main": [
+        "dist/css/bootstrap.min.css",
+        "dist/css/bootstrap-theme.min.css"
+      ]
+    },
+    "angular": {
+      "main": "*.min.js"
+    },
+    "angular-winjs": {
+      "main": "js/angular-winjs.js"
+    },
+    "angular-ui-router": {
+      "main": "release/*.min.js"
+    },
+    "angular-sanitize": {
+      "main": "*.min.js"
+    },
+    "angular-animate": {
+      "main": "*.min.js"
+    },
+    "angular-bootstrap": {
+      "main": "*tpls.min.js"
+    },
+    "angular-datatables": {
+      "main": "dist/*.min.js"
+    },
+    "angular-resource": {
+      "main": "*.min.js"
+    },
+    "angular-applicationinsights": {
+      "main": "dist/*.min.js"
+    },
+    "DataTables": {
+      "main": "./media/js/*.min.js"
+    },
+    "datatables-responsive": {
+      "main": "js/dataTables.responsive.js"
+    },
+    "adal-angular": {
+      "main": [
+        "./lib/adal.js",
+        "./lib/adal-angular.js"
+      ]
+    },
+    "winjs": {
+      "main": [
+        "fonts/Symbols.ttf",
+        "css/ui-light.min.css",
+        "js/base.min.js",
+        "js/ui.min.js"
+      ]
+    },
+    "underscore": {
+      "main": "underscore-min.js"
+    }
+  },
+  "resolutions": {
+    "angular": "1.4.9"
+  }
+}
