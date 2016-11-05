@@ -76,6 +76,7 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameStatus.cs" />
     <Compile Include="WinVector.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="Constants.cs" />

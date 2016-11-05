@@ -24,19 +24,4 @@ namespace GameActor.Interfaces
         [EnumMember]
         FORWARD_DIAGONAL = 8,
     }
-
-    [DataContract(Namespace = Constants.DataContractNamespace)]
-    public class GameStatus
-    {
-        [DataMember]
-        public WinVector WinVector { get; set; }
-        [DataMember]
-        public PlayerType? Winner { get; set; }
-        [DataMember]
-        public bool IsDraw { get; set; }
-        [DataMember]
-        public MoveMetadata[][] Matrix { get; set; }
-        [DataMember]
-        public PlayerType NextPlayer { get; set; }
-    }
 }
