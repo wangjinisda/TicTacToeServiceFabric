@@ -141,8 +141,6 @@ namespace GameActor
                     moveMatrix[2][2] = moveMetadata;
                     break;
             }
-
-            gameState.NextPlayer = moveMetadata.Player == PlayerType.Cross ? PlayerType.Zero : PlayerType.Cross;
         }
 
         public async Task<GameStatus> CheckGameStatus()
@@ -153,7 +151,6 @@ namespace GameActor
 
             var gameState = await this.StateManager.GetStateAsync<GameState>("GameState");
             var matrix = gameState.Matrix;
-            var nextPlayer = gameState.NextPlayer;
 
             player = PlayerType.Cross;
             if (!FindWinner(matrix, ref winVector, player.Value))
@@ -174,9 +171,7 @@ namespace GameActor
             {
                 Winner = player,
                 WinVector = winVector,
-                IsDraw = isDraw,
-                Matrix = matrix,
-                NextPlayer = nextPlayer
+                IsDraw = isDraw
             };
         }
 

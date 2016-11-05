@@ -11,9 +11,5 @@ namespace GameActor.Interfaces
         public PlayerType? Winner { get; set; }
         [DataMember]
         public bool IsDraw { get; set; }
-        [DataMember]
-        public MoveMetadata[][] Matrix { get; set; }
-        [DataMember]
-        public PlayerType NextPlayer { get; set; }
     }
 }

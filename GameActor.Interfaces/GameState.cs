@@ -11,8 +11,5 @@ namespace GameActor.Interfaces
 
         [DataMember]
         public IList<PlayerType> Players { get; set; }
-
-        [DataMember]
-        public PlayerType NextPlayer { get; set; }
     }
 }
