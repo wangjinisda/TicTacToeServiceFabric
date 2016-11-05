@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "TicTacToe", "TicTacToe\TicTacToe.sfproj", "{FEC57EE2-367E-4773-912F-3AD69437A52E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameActor", "GameActor\GameActor.csproj", "{B8E1B595-9F70-4618-9BBE-A9C458B70D7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameActor.Interfaces", "GameActor.Interfaces\GameActor.Interfaces.csproj", "{F182C221-18EE-45BB-8DF9-03F714BE8C08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nelson.TicTacToe.Client", "TicTacToeClient\Nelson.TicTacToe.Client.csproj", "{2D043477-0BF4-473B-AB3D-5F28EE6673DA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FEC57EE2-367E-4773-912F-3AD69437A52E}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{FEC57EE2-367E-4773-912F-3AD69437A52E}.Debug|x64.ActiveCfg = Debug|x64
+		{FEC57EE2-367E-4773-912F-3AD69437A52E}.Debug|x64.Build.0 = Debug|x64
+		{FEC57EE2-367E-4773-912F-3AD69437A52E}.Debug|x64.Deploy.0 = Debug|x64
+		{FEC57EE2-367E-4773-912F-3AD69437A52E}.Release|Any CPU.ActiveCfg = Release|x64
+		{FEC57EE2-367E-4773-912F-3AD69437A52E}.Release|x64.ActiveCfg = Release|x64
+		{FEC57EE2-367E-4773-912F-3AD69437A52E}.Release|x64.Build.0 = Release|x64
+		{FEC57EE2-367E-4773-912F-3AD69437A52E}.Release|x64.Deploy.0 = Release|x64
+		{B8E1B595-9F70-4618-9BBE-A9C458B70D7E}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{B8E1B595-9F70-4618-9BBE-A9C458B70D7E}.Debug|x64.ActiveCfg = Debug|x64
+		{B8E1B595-9F70-4618-9BBE-A9C458B70D7E}.Debug|x64.Build.0 = Debug|x64
+		{B8E1B595-9F70-4618-9BBE-A9C458B70D7E}.Release|Any CPU.ActiveCfg = Release|x64
+		{B8E1B595-9F70-4618-9BBE-A9C458B70D7E}.Release|x64.ActiveCfg = Release|x64
+		{B8E1B595-9F70-4618-9BBE-A9C458B70D7E}.Release|x64.Build.0 = Release|x64
+		{F182C221-18EE-45BB-8DF9-03F714BE8C08}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{F182C221-18EE-45BB-8DF9-03F714BE8C08}.Debug|x64.ActiveCfg = Debug|x64
+		{F182C221-18EE-45BB-8DF9-03F714BE8C08}.Debug|x64.Build.0 = Debug|x64
+		{F182C221-18EE-45BB-8DF9-03F714BE8C08}.Release|Any CPU.ActiveCfg = Release|x64
+		{F182C221-18EE-45BB-8DF9-03F714BE8C08}.Release|x64.ActiveCfg = Release|x64
+		{F182C221-18EE-45BB-8DF9-03F714BE8C08}.Release|x64.Build.0 = Release|x64
+		{2D043477-0BF4-473B-AB3D-5F28EE6673DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D043477-0BF4-473B-AB3D-5F28EE6673DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D043477-0BF4-473B-AB3D-5F28EE6673DA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2D043477-0BF4-473B-AB3D-5F28EE6673DA}.Debug|x64.Build.0 = Debug|Any CPU
+		{2D043477-0BF4-473B-AB3D-5F28EE6673DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D043477-0BF4-473B-AB3D-5F28EE6673DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D043477-0BF4-473B-AB3D-5F28EE6673DA}.Release|x64.ActiveCfg = Release|Any CPU
+		{2D043477-0BF4-473B-AB3D-5F28EE6673DA}.Release|x64.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
