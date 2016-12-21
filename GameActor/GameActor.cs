@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Runtime;
 using GameActor.Interfaces;
+using System;
 
 namespace GameActor
 {
@@ -15,8 +16,12 @@ namespace GameActor
     ///  - None: State is kept in memory only and not replicated.
     /// </remarks>
     [StatePersistence(StatePersistence.Persisted)]
-    internal class GameActor : Actor, ITicTacToe
+    internal class GameActor : Actor, ITicTacToe, IRemindable
     {
+        private const string REMINDER_NAME = "ClearGameStateOnTimeout";
+        private const int TIMEOUT_INTERVAL = 1;
+        private IActorReminder _reminderRegistration;
+
         /// <summary>
         /// Initializes a new instance of GameActor
         /// </summary>
@@ -29,7 +34,7 @@ namespace GameActor
 
         public async Task Move(MoveMetadata moveMetadata)
         {
-            var gameState = await this.StateManager.GetStateAsync<GameState>("GameState");
+            var gameState = await StateManager.GetStateAsync<GameState>("GameState");
 
             Store(gameState, moveMetadata);
 
@@ -41,7 +46,7 @@ namespace GameActor
 
         public async Task<bool> Register(PlayerType requestedPlayer)
         {
-            var gameState = await this.StateManager.GetStateAsync<GameState>("GameState");
+            var gameState = await StateManager.GetStateAsync<GameState>("GameState");
             var players = gameState.Players;
             
             if (players.Count == 2)
@@ -56,6 +61,14 @@ namespace GameActor
             {
                 var events = GetEvent<ITicTacToeEvents>();
                 events.GameStarted();
+
+                // Register reminder
+
+                _reminderRegistration = await RegisterReminderAsync(
+                 REMINDER_NAME,
+                 BitConverter.GetBytes(0),
+                 TimeSpan.FromMinutes(TIMEOUT_INTERVAL),
+                 TimeSpan.FromMilliseconds(-1));
             }
             
             await StateManager.SetStateAsync("GameState", gameState);
@@ -65,19 +78,23 @@ namespace GameActor
 
         public async Task<bool> Unregister(PlayerType player, bool earlyBailOut)
         {
-            var gameState = await this.StateManager.GetStateAsync<GameState>("GameState");
+            var gameState = await StateManager.GetStateAsync<GameState>("GameState");
             var players = gameState.Players;
 
             bool removed = players.Remove(player);
 
             // Reset state if all users are exited
             if (players.Count == 0)
+            {
                 gameState.Matrix = new MoveMetadata[3][]
                                     {
                                         new MoveMetadata[3],
                                         new MoveMetadata[3],
                                         new MoveMetadata[3]
                                     };
+
+                await UnregisterReminderAsync(_reminderRegistration);
+            }
 
             if (earlyBailOut)
             {
@@ -104,7 +121,7 @@ namespace GameActor
                  new MoveMetadata[3]
             };   
 
-            return this.StateManager.TryAddStateAsync("GameState", new GameState { Matrix = _moveMatrix, Players = new List<PlayerType>() });
+            return StateManager.TryAddStateAsync("GameState", new GameState { Matrix = _moveMatrix, Players = new List<PlayerType>() });
         }
 
         private void Store(GameState gameState, MoveMetadata moveMetadata)
@@ -149,7 +166,7 @@ namespace GameActor
             PlayerType? player = null;
             bool isDraw = false;
 
-            var gameState = await this.StateManager.GetStateAsync<GameState>("GameState");
+            var gameState = await StateManager.GetStateAsync<GameState>("GameState");
             var matrix = gameState.Matrix;
 
             player = PlayerType.Cross;
@@ -238,6 +255,23 @@ namespace GameActor
             }
 
             return (winVector != WinVector.NONE);
+        }
+
+        public async Task ReceiveReminderAsync(string reminderName, byte[] context, TimeSpan dueTime, TimeSpan period)
+        {
+            if (reminderName.Equals(REMINDER_NAME))
+            {
+                var gameState = await StateManager.GetStateAsync<GameState>("GameState");
+                gameState.Matrix = new MoveMetadata[3][]
+                            {
+                                        new MoveMetadata[3],
+                                        new MoveMetadata[3],
+                                        new MoveMetadata[3]
+                            };
+
+                var events = GetEvent<ITicTacToeEvents>();
+                events.TimedOut();
+            }
         }
     }
 }

@@ -23,5 +23,10 @@ namespace GameActor.Interfaces
         /// </summary>
         /// <param name="player">Aborted player.</param>
         void BailedOutEarly(PlayerType player);
+
+        /// <summary>
+        /// Timed out
+        /// </summary>
+        void TimedOut();
     }
 }

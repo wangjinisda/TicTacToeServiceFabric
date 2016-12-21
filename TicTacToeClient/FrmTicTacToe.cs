@@ -504,6 +504,17 @@ namespace Nelson.TicTacToe.Client
             Close();
         }
 
+        public void TimedOut()
+        {
+            MessageBox.Show(string.Format(CultureInfo.InvariantCulture, "Game timedout."),
+                "TicTacToe",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+            _actorProxy.Unregister(PlayerChoice.Value, true);
+            _closeSilently = true;
+            Close();
+        }
+
         #endregion
 
         #region Property
