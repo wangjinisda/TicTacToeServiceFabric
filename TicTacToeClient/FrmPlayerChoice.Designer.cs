@@ -54,7 +54,7 @@
             // 
             // btnStartGame
             // 
-            this.btnStartGame.Location = new System.Drawing.Point(241, 201);
+            this.btnStartGame.Location = new System.Drawing.Point(241, 194);
             this.btnStartGame.Name = "btnStartGame";
             this.btnStartGame.Size = new System.Drawing.Size(75, 23);
             this.btnStartGame.TabIndex = 3;
@@ -65,7 +65,7 @@
             // lblPlayerChoice
             // 
             this.lblPlayerChoice.AutoSize = true;
-            this.lblPlayerChoice.Location = new System.Drawing.Point(158, 159);
+            this.lblPlayerChoice.Location = new System.Drawing.Point(158, 156);
             this.lblPlayerChoice.Name = "lblPlayerChoice";
             this.lblPlayerChoice.Size = new System.Drawing.Size(77, 13);
             this.lblPlayerChoice.TabIndex = 2;
@@ -74,7 +74,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(158, 82);
+            this.label1.Location = new System.Drawing.Point(168, 74);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(67, 13);
             this.label1.TabIndex = 0;
@@ -90,7 +90,7 @@
             // 
             // btnEndGame
             // 
-            this.btnEndGame.Location = new System.Drawing.Point(322, 201);
+            this.btnEndGame.Location = new System.Drawing.Point(323, 194);
             this.btnEndGame.Name = "btnEndGame";
             this.btnEndGame.Size = new System.Drawing.Size(75, 23);
             this.btnEndGame.TabIndex = 4;
@@ -101,7 +101,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(158, 123);
+            this.label2.Location = new System.Drawing.Point(164, 115);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(71, 13);
             this.label2.TabIndex = 1;

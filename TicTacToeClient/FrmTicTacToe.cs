@@ -38,7 +38,7 @@ namespace Nelson.TicTacToe.Client
             InitializeGraphics();
 
             if (!_gameStated)
-                toolStripStatus.Text = "Other Player has not joined yet.";
+                toolStripStatus.Text = "Other player has not joined yet.";
 
             //System.Threading.SynchronizationContext.SetSynchronizationContext(System.Threading.SynchronizationContext.Current);
             _synchronizationContext = System.Threading.SynchronizationContext.Current;
