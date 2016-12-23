@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using GameActor.Interfaces;
 using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Runtime;
-using GameActor.Interfaces;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GameActor
 {
@@ -36,7 +36,7 @@ namespace GameActor
         {
             var gameState = await StateManager.GetStateAsync<GameState>("GameState");
 
-            Store(gameState, moveMetadata);
+            StoreGameState(gameState, moveMetadata);
 
             var events = GetEvent<ITicTacToeEvents>();
             events.Moved(moveMetadata, gameState.Matrix);
@@ -124,7 +124,7 @@ namespace GameActor
             return StateManager.TryAddStateAsync("GameState", new GameState { Matrix = _moveMatrix, Players = new List<PlayerType>() });
         }
 
-        private void Store(GameState gameState, MoveMetadata moveMetadata)
+        private void StoreGameState(GameState gameState, MoveMetadata moveMetadata)
         {
             MoveMetadata[][] moveMatrix = gameState.Matrix;
 
@@ -268,6 +268,7 @@ namespace GameActor
                                         new MoveMetadata[3],
                                         new MoveMetadata[3]
                             };
+                await StateManager.SetStateAsync("GameState", gameState);
 
                 var events = GetEvent<ITicTacToeEvents>();
                 events.TimedOut();
