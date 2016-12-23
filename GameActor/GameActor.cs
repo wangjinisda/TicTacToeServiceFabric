@@ -19,7 +19,7 @@ namespace GameActor
     internal class GameActor : Actor, ITicTacToe, IRemindable
     {
         private const string REMINDER_NAME = "ClearGameStateOnTimeout";
-        private const int TIMEOUT_INTERVAL = 1;
+        private const int TIMEOUT_INTERVAL = 5;
         private IActorReminder _reminderRegistration;
 
         /// <summary>

@@ -1,24 +1,22 @@
-﻿using System;
+﻿using GameActor.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Windows.Forms;
-using GameActor.Interfaces;
-using Microsoft.ServiceFabric.Actors.Client;
-using Microsoft.ServiceFabric.Actors;
 
 namespace Nelson.TicTacToe.Client
 {
     internal partial class FrmTicTacToe : Form, ITicTacToeEvents
     {
+        private System.Threading.SynchronizationContext _synchronizationContext;// Synchronization context for UI thread
         private List<WinVector> _winVectorsToPaint = new List<WinVector>();     // Holds instructions for painting on the screen.
         private MoveMetadata[][] _moveMatrix = new MoveMetadata[3][] {          // 3x3 matrix to hold the move data of both the players.
              new MoveMetadata[3],
              new MoveMetadata[3],
              new MoveMetadata[3]
         };         
-        private ITicTacToe _actorProxy;                                         // Actor proxy.
         private Graphics _graphics;                                             // Graphics instance for painting.
         private bool _closeSilently;                                            // Indicates whether to close the form silently.
         private bool _isYourTurn;                                               // Indicates whether it is your turn.
@@ -35,27 +33,18 @@ namespace Nelson.TicTacToe.Client
 
         #region Events
 
-        private async void frmTicTacToe_Load(object sender, System.EventArgs e)
+        private void frmTicTacToe_Load(object sender, System.EventArgs e)
         {
             InitializeGraphics();
 
-            _actorProxy = GetActorProxy();
+            if (!_gameStated)
+                toolStripStatus.Text = "Other Player has not joined yet.";
 
-            // Register Player.
-            if (await _actorProxy.Register(PlayerChoice.Value))
-            {
-                Registered(PlayerChoice.Value == PlayerType.Cross ? true : false, PlayerChoice.Value);
-            }
-            else
-            {
-                MessageBox.Show(string.Format(CultureInfo.InvariantCulture, "Reached the maximum player limit or the requested player type is not available for selection."),
-               "TicTacToe",
-               MessageBoxButtons.OK,
-               MessageBoxIcon.Exclamation);
+            //System.Threading.SynchronizationContext.SetSynchronizationContext(System.Threading.SynchronizationContext.Current);
+            _synchronizationContext = System.Threading.SynchronizationContext.Current;
 
-                _closeSilently = true;
-                Close();
-            }
+            // Set window title
+            Text = string.Format(CultureInfo.InvariantCulture, "TicTacToe - {0} - {1}", PlayerChoice.Value.ToString(), Player);            
         }
 
         private void frmTicTacToe_Paint(object sender, PaintEventArgs e)
@@ -71,7 +60,7 @@ namespace Nelson.TicTacToe.Client
         {
             if (!_gameStated)
             {
-                MessageBox.Show("Other Player has not joined yet.", 
+                MessageBox.Show("Plese wait for other player to join",
                                 "TicTacToe", 
                                 MessageBoxButtons.OK, 
                                 MessageBoxIcon.Information);
@@ -87,7 +76,7 @@ namespace Nelson.TicTacToe.Client
                 {
                     MoveMetadata moveMetadata = new MoveMetadata(PlayerChoice.Value, GetCellNumber(clickedPoint));
 
-                    await _actorProxy.Move(moveMetadata);
+                    await ActorProxy.Move(moveMetadata);
                     _isYourTurn = false;
                 }
                 else
@@ -123,7 +112,7 @@ namespace Nelson.TicTacToe.Client
                 }
                 else
                 {
-                    _actorProxy.Unregister(PlayerChoice.Value, true);
+                    ActorProxy.Unregister(PlayerChoice.Value, true);
                 }
             }
         }
@@ -137,15 +126,6 @@ namespace Nelson.TicTacToe.Client
         #endregion
 
         #region Members
-
-        private ITicTacToe GetActorProxy()
-        {
-            var gameId = new ActorId("TicTacToeActorId");
-            var game = ActorProxy.Create<ITicTacToe>(gameId, "fabric:/TicTacToe");
-            game.SubscribeAsync(this);
-            return game;
-        }
-
 
         #region Graphics
 
@@ -310,9 +290,9 @@ namespace Nelson.TicTacToe.Client
 
         #endregion
                
-        private async void GameStatus()
+        private async void CheckGameStatus()
         {
-            var gameStatus = await _actorProxy.CheckGameStatus();
+            var gameStatus = await ActorProxy.CheckGameStatus();
 
             if (gameStatus.WinVector != WinVector.NONE)
             {
@@ -329,7 +309,7 @@ namespace Nelson.TicTacToe.Client
         {
             toolStripStatus.Text = "Game over.";
 
-            _actorProxy.Unregister(PlayerChoice.Value, false);
+            ActorProxy.Unregister(PlayerChoice.Value, false);
             
             MessageBox.Show("Game is a draw.",
                             "TicTacToe",
@@ -337,22 +317,22 @@ namespace Nelson.TicTacToe.Client
                             MessageBoxIcon.Information);
 
             _closeSilently = true;
-            Close();
+            CloseWindowFromUiThread();
         }
 
         private void Won(PlayerType? winner)
         {
             toolStripStatus.Text = "Game over.";
 
-            _actorProxy.Unregister(PlayerChoice.Value, false);
+            ActorProxy.Unregister(PlayerChoice.Value, false);
 
             MessageBox.Show(string.Format(CultureInfo.InvariantCulture, "{0} has won the game.", winner),
                             "TicTacToe",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information);
             
-            _closeSilently = true;            
-            Close();
+            _closeSilently = true;
+            CloseWindowFromUiThread();
         }
         
         private bool HasValueInCell(Point clickedPoint)
@@ -452,23 +432,15 @@ namespace Nelson.TicTacToe.Client
 
         #region ITicTacToeCallback Members
 
-        public void Registered(bool earlyBird, PlayerType allottedPlayer)
+        public void Registered(bool isCross)
         {
-            if (earlyBird)
-            {
-                _isYourTurn = true;
-                toolStripStatus.Text = "Other Player has not joined yet.";
-            }
-
-            PlayerChoice = allottedPlayer;
-
-            Text = string.Format(CultureInfo.InvariantCulture, "TicTacToe - {0}", PlayerChoice.Value.ToString());
+            if (isCross) _isYourTurn = true;
         }
 
 
         public void GameStarted()
         {
-            _gameStated = true;
+             _gameStated = true;
 
             if (_isYourTurn)
             {
@@ -486,7 +458,7 @@ namespace Nelson.TicTacToe.Client
 
             Invalidate();
 
-            GameStatus();
+            CheckGameStatus();
 
             _isYourTurn = (PlayerChoice.Value == moveMetadata.Player) ? false : true;
 
@@ -499,9 +471,9 @@ namespace Nelson.TicTacToe.Client
                 "TicTacToe",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
-            _actorProxy.Unregister(PlayerChoice.Value, true);
+            ActorProxy.Unregister(PlayerChoice.Value, true);
             _closeSilently = true;
-            Close();
+            CloseWindowFromUiThread();
         }
 
         public void TimedOut()
@@ -510,19 +482,28 @@ namespace Nelson.TicTacToe.Client
                 "TicTacToe",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
-            _actorProxy.Unregister(PlayerChoice.Value, true);
+            ActorProxy.Unregister(PlayerChoice.Value, true);
             _closeSilently = true;
-            Close();
+            CloseWindowFromUiThread();
+        }
+
+        public void CloseWindowFromUiThread()
+        {
+            //System.Threading.SynchronizationContext.Current.Send((state) =>
+            _synchronizationContext.Send((state) =>
+            {
+                Close();
+            }, null);
         }
 
         #endregion
 
-        #region Property
+        #region Properties
 
-        public PlayerType? PlayerChoice
-        {
-            get; set;
-        }
+        public PlayerType? PlayerChoice { get; internal set; }
+        public string GameRoom { get; internal set; }
+        public string Player { get; internal set; }
+        public ITicTacToe ActorProxy { get; internal set; }
 
         #endregion
     }
