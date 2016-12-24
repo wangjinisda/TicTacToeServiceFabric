@@ -32,9 +32,12 @@ namespace GameActor
         {
         }
 
-        public async Task Move(MoveMetadata moveMetadata)
+        public async Task<bool> Move(MoveMetadata moveMetadata)
         {
             var gameState = await StateManager.GetStateAsync<GameState>("GameState");
+
+            if (moveMetadata.Player != gameState.NextPlayer)
+                return await Task.FromResult(false);
 
             StoreGameState(gameState, moveMetadata);
 
@@ -42,6 +45,8 @@ namespace GameActor
             events.Moved(moveMetadata, gameState.Matrix);
 
             await StateManager.SetStateAsync("GameState", gameState);
+
+            return await Task.FromResult(true);
         }
 
         public async Task<bool> Register(PlayerType requestedPlayer)
@@ -121,7 +126,12 @@ namespace GameActor
                  new MoveMetadata[3]
             };   
 
-            return StateManager.TryAddStateAsync("GameState", new GameState { Matrix = _moveMatrix, Players = new List<PlayerType>() });
+            return StateManager.TryAddStateAsync("GameState", new GameState
+            {
+                NextPlayer = PlayerType.Cross,
+                Matrix = _moveMatrix,
+                Players = new List<PlayerType>()
+            });
         }
 
         private void StoreGameState(GameState gameState, MoveMetadata moveMetadata)
@@ -158,6 +168,8 @@ namespace GameActor
                     moveMatrix[2][2] = moveMetadata;
                     break;
             }
+
+            gameState.NextPlayer = (moveMetadata.Player == PlayerType.Cross) ? PlayerType.Zero : PlayerType.Cross;
         }
 
         public async Task<GameStatus> CheckGameStatus()
@@ -168,6 +180,7 @@ namespace GameActor
 
             var gameState = await StateManager.GetStateAsync<GameState>("GameState");
             var matrix = gameState.Matrix;
+            var nextPlayer = gameState.NextPlayer;
 
             player = PlayerType.Cross;
             if (!FindWinner(matrix, ref winVector, player.Value))
@@ -188,7 +201,8 @@ namespace GameActor
             {
                 Winner = player,
                 WinVector = winVector,
-                IsDraw = isDraw
+                IsDraw = isDraw,
+                NextPlayer = nextPlayer
             };
         }
 

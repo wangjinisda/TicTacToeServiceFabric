@@ -18,7 +18,7 @@ namespace GameActor.Interfaces
         /// Broadcasts the move metadata to both the clients.
         /// </summary>
         /// <param name="moveMetadata">Move metadata.</param>
-        Task Move(MoveMetadata moveMetadata);
+        Task<bool> Move(MoveMetadata moveMetadata);
 
         /// <summary>
         /// Unregisters the player from the server players list.
