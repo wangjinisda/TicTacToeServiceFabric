@@ -37,6 +37,7 @@
             this.btnEndGame = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.txtPlayer = new System.Windows.Forms.TextBox();
+            this.btnLoadTest = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cbPlayerChoice
@@ -114,11 +115,23 @@
             this.txtPlayer.Size = new System.Drawing.Size(251, 20);
             this.txtPlayer.TabIndex = 1;
             // 
+            // btnLoadTest
+            // 
+            this.btnLoadTest.Location = new System.Drawing.Point(536, 281);
+            this.btnLoadTest.Name = "btnLoadTest";
+            this.btnLoadTest.Size = new System.Drawing.Size(75, 23);
+            this.btnLoadTest.TabIndex = 5;
+            this.btnLoadTest.Text = "Load Test";
+            this.btnLoadTest.UseVisualStyleBackColor = true;
+            this.btnLoadTest.Visible = false;
+            this.btnLoadTest.Click += new System.EventHandler(this.btnLoadTest_Click);
+            // 
             // FrmPlayerChoice
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(623, 316);
+            this.Controls.Add(this.btnLoadTest);
             this.Controls.Add(this.txtPlayer);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtGameRoom);
@@ -148,5 +161,6 @@
         private System.Windows.Forms.Button btnEndGame;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtPlayer;
+        private System.Windows.Forms.Button btnLoadTest;
     }
 }

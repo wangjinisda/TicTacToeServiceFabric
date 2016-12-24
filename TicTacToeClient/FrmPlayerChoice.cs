@@ -18,21 +18,20 @@ namespace Nelson.TicTacToe.Client
             InitializeComponent();
         }
 
-        private async void btnStartGame_Click(object sender, EventArgs e)
+        private bool ValidateFields()
         {
-            // Validate fields
             if (string.IsNullOrWhiteSpace(txtGameRoom.Text))
             {
                 MessageBox.Show("Please enter an existing or new game room you want to join.", "TicTacToe", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtGameRoom.Focus();
-                return;
+                return false;
             }
 
             if (string.IsNullOrWhiteSpace(txtPlayer.Text))
             {
                 MessageBox.Show("Please enter the player name.", "TicTacToe", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtPlayer.Focus();
-                return;
+                return false;
             }
 
             string playerChoice = cbPlayerChoice.SelectedItem as string;
@@ -40,23 +39,26 @@ namespace Nelson.TicTacToe.Client
             {
                 MessageBox.Show("Please select a player type.", "TicTacToe", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 cbPlayerChoice.Focus();
-                return;
+                return false;
             }
+
+            return true;
+        }
+
+        private async void btnStartGame_Click(object sender, EventArgs e)
+        {
+            // Validate fields
+            if (!ValidateFields()) return;
 
             // Store
-            if (playerChoice == "Cross")
-            {
-                _frmTicTacToe.PlayerChoice = PlayerType.Cross;
-            }
-            else if (playerChoice == "Zero")
-            {
-                _frmTicTacToe.PlayerChoice = PlayerType.Zero;
-            }
-
-            _frmTicTacToe.GameRoom = txtGameRoom.Text;
-            _frmTicTacToe.Player = txtPlayer.Text;
+            StoreFields();
 
             // Register and retry on transient error using exponential backoff algorithm
+            await ConnectToGameServer();
+        }
+
+        private async Task ConnectToGameServer()
+        {
             const int MAX_RETRIES = 3;
             const int MAX_WAIT_INTERVAL = 60000;
             int retries = 0;
@@ -77,20 +79,16 @@ namespace Nelson.TicTacToe.Client
                     // Register Player.
                     bool registered = await _actorProxy.Register(_frmTicTacToe.PlayerChoice.Value);
 
-                    if (registered)
-                    {
-                        _frmTicTacToe.Registered(_frmTicTacToe.PlayerChoice.Value == PlayerType.Cross);
-                    }
-                    else
+                    if (!registered)
                     {
                         MessageBox.Show(string.Format(CultureInfo.InvariantCulture, "Reached the maximum player limit or the requested player type is not available for selection."),
-                       "TicTacToe",
-                       MessageBoxButtons.OK,
-                       MessageBoxIcon.Exclamation);
-
-                        Close();
+                           "TicTacToe",
+                           MessageBoxButtons.OK,
+                           MessageBoxIcon.Exclamation);
+                        return;
                     }
 
+                    _frmTicTacToe.Registered(_frmTicTacToe.PlayerChoice.Value == PlayerType.Cross);
                     Hide();
                     _frmTicTacToe.Show();
                 }
@@ -108,16 +106,31 @@ namespace Nelson.TicTacToe.Client
                         else
                         {
                             retry = false;
-                            Close();
                         }
                     }
                     else
                     {
                         retry = false;
-                        Close();
+                        MessageBox.Show(ex.Message);
                     }
                 }
             } while (retry && (retries++ < MAX_RETRIES));
+        }
+
+        private void StoreFields()
+        {
+            string playerChoice = cbPlayerChoice.SelectedItem as string;
+            if (playerChoice == "Cross")
+            {
+                _frmTicTacToe.PlayerChoice = PlayerType.Cross;
+            }
+            else if (playerChoice == "Zero")
+            {
+                _frmTicTacToe.PlayerChoice = PlayerType.Zero;
+            }
+
+            _frmTicTacToe.GameRoom = txtGameRoom.Text;
+            _frmTicTacToe.Player = txtPlayer.Text;
         }
 
         private ITicTacToe GetActorProxy()
@@ -143,6 +156,33 @@ namespace Nelson.TicTacToe.Client
         private void btnEndGame_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private async void btnLoadTest_Click(object sender, EventArgs e)
+        {
+            foreach (int i in System.Linq.Enumerable.Range(0, 1000))
+            {
+                var gameId = new ActorId("LoadTest"+i);
+                var game = ActorProxy.Create<ITicTacToe>(gameId, "fabric:/TicTacToe");
+
+                await game.Register(PlayerType.Cross);
+                await game.Register(PlayerType.Zero);
+
+                await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.First));
+                await game.Move(new MoveMetadata(PlayerType.Zero, CellNumber.Second));
+                await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.Third));
+                await game.Move(new MoveMetadata(PlayerType.Zero, CellNumber.Forth));
+                await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.First));
+                await game.Move(new MoveMetadata(PlayerType.Zero, CellNumber.Sixth));
+                await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.Seventh));
+                await game.Move(new MoveMetadata(PlayerType.Zero, CellNumber.Eighth));
+                await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.Ninth));
+
+                var gameStatus = await game.CheckGameStatus();
+
+                await game.Unregister(PlayerType.Cross, false);
+                await game.Unregister(PlayerType.Zero, false);
+            }
         }
     }
 }
