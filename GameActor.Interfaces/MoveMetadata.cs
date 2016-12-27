@@ -5,7 +5,7 @@ namespace GameActor.Interfaces
     /// <summary>
     /// Holds the move metadata. This class is immutable. http://en.wikipedia.org/wiki/Immutable_object
     /// </summary>
-    [DataContract(Namespace = Constants.DataContractNamespace)]
+    [DataContract]
     public class MoveMetadata
     {
         public MoveMetadata(PlayerType playerType, CellNumber cellNumber)

@@ -42,11 +42,38 @@ namespace GameActor
             StoreGameState(gameState, moveMetadata);
 
             var events = GetEvent<ITicTacToeEvents>();
-            events.Moved(moveMetadata, gameState.Matrix);
+            events.Moved(moveMetadata.Player, gameState.Matrix);
 
             await StateManager.SetStateAsync("GameState", gameState);
+            
+            // Check game status
+            await CheckStatusAndRaiseEvents(events);
 
             return await Task.FromResult(true);
+        }
+
+        private async Task CheckStatusAndRaiseEvents(ITicTacToeEvents events)
+        {
+            var gameStatus = await CheckGameStatus();
+
+            if (gameStatus.Item1 != WinVector.NONE)
+            {
+                events.GameEnded(
+                    new GameEndedInfo
+                    {
+                        Player = gameStatus.Item3,
+                        EventType = GameEndedEventType.Won,
+                        WinVector = gameStatus.Item1
+                    });
+            }
+            else if (gameStatus.Item2)
+            {
+                events.GameEnded(
+                    new GameEndedInfo
+                    {
+                        EventType = GameEndedEventType.Tie
+                    });
+            }
         }
 
         public async Task<bool> Register(PlayerType requestedPlayer)
@@ -98,13 +125,15 @@ namespace GameActor
                                         new MoveMetadata[3]
                                     };
 
+                gameState.NextPlayer = PlayerType.Cross;
+
                 await UnregisterReminderAsync(_reminderRegistration);
             }
 
             if (earlyBailOut)
             {
                 var events = GetEvent<ITicTacToeEvents>();
-                events.BailedOutEarly(player);
+                events.GameEnded(new GameEndedInfo { Player = player, EventType = GameEndedEventType.BailedOutEarly });
             }
 
             await StateManager.SetStateAsync("GameState", gameState);
@@ -172,7 +201,7 @@ namespace GameActor
             gameState.NextPlayer = (moveMetadata.Player == PlayerType.Cross) ? PlayerType.Zero : PlayerType.Cross;
         }
 
-        public async Task<GameStatus> CheckGameStatus()
+        public async Task<Tuple<WinVector, bool, PlayerType>> CheckGameStatus()
         {
             WinVector winVector = WinVector.NONE;
             PlayerType? player = null;
@@ -197,13 +226,8 @@ namespace GameActor
                 }
             }
 
-            return new GameStatus
-            {
-                Winner = player,
-                WinVector = winVector,
-                IsDraw = isDraw,
-                NextPlayer = nextPlayer
-            };
+            return new Tuple<WinVector, bool, PlayerType>(
+                winVector, isDraw, player.Value);
         }
 
         private static bool FindWinner(
@@ -285,7 +309,7 @@ namespace GameActor
                 await StateManager.SetStateAsync("GameState", gameState);
 
                 var events = GetEvent<ITicTacToeEvents>();
-                events.TimedOut();
+                events.GameEnded(new GameEndedInfo { EventType = GameEndedEventType.TimedOut });
             }
         }
     }

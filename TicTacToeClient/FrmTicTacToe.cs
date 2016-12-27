@@ -1,6 +1,5 @@
 ﻿using GameActor.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
@@ -11,7 +10,7 @@ namespace Nelson.TicTacToe.Client
     internal partial class FrmTicTacToe : Form, ITicTacToeEvents
     {
         private System.Threading.SynchronizationContext _synchronizationContext;// Synchronization context for UI thread
-        private List<WinVector> _winVectorsToPaint = new List<WinVector>();     // Holds instructions for painting on the screen.
+        private WinVector _winVectorsToPaint = new WinVector();                 // Holds instructions for painting on the screen.
         private MoveMetadata[][] _moveMatrix = new MoveMetadata[3][] {          // 3x3 matrix to hold the move data of both the players.
              new MoveMetadata[3],
              new MoveMetadata[3],
@@ -139,38 +138,35 @@ namespace Nelson.TicTacToe.Client
         {
             // Paint Win Vectors.
             Pen greenPen = new Pen(Color.Green, 4F);
-            _winVectorsToPaint.ForEach((WinVector winVector) =>
+            switch (_winVectorsToPaint)
             {
-                switch (winVector)
-                {
-                    case WinVector.TOP:
-                        _graphics.DrawLine(greenPen, new Point(0, 50), new Point(300, 50));
-                        break;
-                    case WinVector.CENTER:
-                        _graphics.DrawLine(greenPen, new Point(0, 150), new Point(300, 150));
-                        break;
-                    case WinVector.BOTTOM:
-                        _graphics.DrawLine(greenPen, new Point(0, 250), new Point(300, 250));
-                        break;
-                    case WinVector.LEFT:
-                        _graphics.DrawLine(greenPen, new Point(50, 0), new Point(50, 300));
-                        break;
-                    case WinVector.MIDDLE:
-                        _graphics.DrawLine(greenPen, new Point(150, 0), new Point(150, 300));
-                        break;
-                    case WinVector.RIGHT:
-                        _graphics.DrawLine(greenPen, new Point(250, 0), new Point(250, 300));
-                        break;
-                    case WinVector.BACK_DIAGONAL:
-                        _graphics.DrawLine(greenPen, new Point(0, 0), new Point(300, 300));
-                        break;
-                    case WinVector.FORWARD_DIAGONAL:
-                        _graphics.DrawLine(greenPen, new Point(0, 300), new Point(300, 0));
-                        break;
-                    default:
-                        break;
-                }
-            });
+                case WinVector.TOP:
+                    _graphics.DrawLine(greenPen, new Point(0, 50), new Point(300, 50));
+                    break;
+                case WinVector.CENTER:
+                    _graphics.DrawLine(greenPen, new Point(0, 150), new Point(300, 150));
+                    break;
+                case WinVector.BOTTOM:
+                    _graphics.DrawLine(greenPen, new Point(0, 250), new Point(300, 250));
+                    break;
+                case WinVector.LEFT:
+                    _graphics.DrawLine(greenPen, new Point(50, 0), new Point(50, 300));
+                    break;
+                case WinVector.MIDDLE:
+                    _graphics.DrawLine(greenPen, new Point(150, 0), new Point(150, 300));
+                    break;
+                case WinVector.RIGHT:
+                    _graphics.DrawLine(greenPen, new Point(250, 0), new Point(250, 300));
+                    break;
+                case WinVector.BACK_DIAGONAL:
+                    _graphics.DrawLine(greenPen, new Point(0, 0), new Point(300, 300));
+                    break;
+                case WinVector.FORWARD_DIAGONAL:
+                    _graphics.DrawLine(greenPen, new Point(0, 300), new Point(300, 0));
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void PaintSymbols()
@@ -289,52 +285,7 @@ namespace Nelson.TicTacToe.Client
         }
 
         #endregion
-               
-        private async void CheckGameStatus()
-        {
-            var gameStatus = await ActorProxy.CheckGameStatus();
-
-            if (gameStatus.WinVector != WinVector.NONE)
-            {
-                _winVectorsToPaint.Add(gameStatus.WinVector);
-                Invalidate();
-                Won(gameStatus.Winner);
-            } else if (gameStatus.IsDraw)
-            {
-                Draw();
-            }
-        }
-
-        private void Draw()
-        {
-            toolStripStatus.Text = "Game over.";
-
-            ActorProxy.Unregister(PlayerChoice.Value, false);
-            
-            MessageBox.Show("Game is a draw.",
-                            "TicTacToe",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
-
-            _closeSilently = true;
-            CloseWindowFromUiThread();
-        }
-
-        private void Won(PlayerType? winner)
-        {
-            toolStripStatus.Text = "Game over.";
-
-            ActorProxy.Unregister(PlayerChoice.Value, false);
-
-            MessageBox.Show(string.Format(CultureInfo.InvariantCulture, "{0} has won the game.", winner),
-                            "TicTacToe",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
-            
-            _closeSilently = true;
-            CloseWindowFromUiThread();
-        }
-        
+                      
         private bool HasValueInCell(Point clickedPoint)
         {
             MoveMetadata hasValueInCell = null;
@@ -452,48 +403,56 @@ namespace Nelson.TicTacToe.Client
             }
         }
 
-        public void Moved(MoveMetadata moveMetadata, MoveMetadata[][] moveMatrix)
+        public void Moved(PlayerType player, MoveMetadata[][] moveMatrix)
         {
             _moveMatrix = moveMatrix;
 
             Invalidate();
 
-            CheckGameStatus();
-
-            _isYourTurn = (PlayerChoice.Value == moveMetadata.Player) ? false : true;
+            _isYourTurn = (PlayerChoice.Value == player) ? false : true;
 
             toolStripStatus.Text = _isYourTurn ? "Your turn" : "Not your turn";
         }
 
-        public void BailedOutEarly(PlayerType player)
+        public void GameEnded(GameEndedInfo info)
         {
-            MessageBox.Show(string.Format(CultureInfo.InvariantCulture, "{0} has end the game.", player.ToString()),
+            switch (info.EventType)
+            {
+                case GameEndedEventType.Won:
+                    _winVectorsToPaint = info.WinVector;
+                    Invalidate();
+
+                    GameEndedCommon(info.Player, "{0} has won the game !");
+                    break;
+                case GameEndedEventType.Tie:
+                    GameEndedCommon(info.Player, "It's a tie !");
+                    break;
+                case GameEndedEventType.BailedOutEarly:
+                    GameEndedCommon(info.Player, "{0} has end the game.");
+                    break;
+                case GameEndedEventType.TimedOut:
+                    GameEndedCommon(info.Player, "{0} has end the game.");
+                    break;
+            }
+        }
+        private void GameEndedCommon(PlayerType player, string message)
+        {
+            MessageBox.Show(string.Format(CultureInfo.InvariantCulture, message, player.ToString()),
                 "TicTacToe",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
-            ActorProxy.Unregister(PlayerChoice.Value, true);
-            _closeSilently = true;
-            CloseWindowFromUiThread();
-        }
 
-        public void TimedOut()
-        {
-            MessageBox.Show(string.Format(CultureInfo.InvariantCulture, "Game timedout."),
-                "TicTacToe",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
             ActorProxy.Unregister(PlayerChoice.Value, true);
-            _closeSilently = true;
-            CloseWindowFromUiThread();
-        }
 
-        public void CloseWindowFromUiThread()
-        {
+            _closeSilently = true;
+
+            // Close Window from UI thread
             //System.Threading.SynchronizationContext.Current.Send((state) =>
             _synchronizationContext.Send((state) =>
             {
                 Close();
             }, null);
+
         }
 
         #endregion

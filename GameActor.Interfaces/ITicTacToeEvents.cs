@@ -1,4 +1,5 @@
 ﻿using Microsoft.ServiceFabric.Actors;
+using System.Runtime.Serialization;
 
 namespace GameActor.Interfaces
 {
@@ -8,7 +9,7 @@ namespace GameActor.Interfaces
     public interface ITicTacToeEvents : IActorEvents
     {
         /// <summary>
-        /// GameStarted event is called once both the players are connected.
+        /// GameStarted event is raised once both the players are connected.
         /// </summary>
         void GameStarted();
 
@@ -16,17 +17,16 @@ namespace GameActor.Interfaces
         /// Moved event is called for every move.
         /// </summary>
         /// <param name="moveMetadata">Move metadata.</param>
-        void Moved(MoveMetadata moveMetadata, MoveMetadata[][] moveMatrix);
+        void Moved(PlayerType player, MoveMetadata[][] moveMatrix);
 
         /// <summary>
-        /// BailedOutEarly event is called to inform the other player that your have aborted.
+        /// GameEnded event is raised when either of the below occurs.
+        /// 1. Won
+        /// 2. Tie
+        /// 3. TimedOut
+        /// 4. BailedOutEarly
         /// </summary>
-        /// <param name="player">Aborted player.</param>
-        void BailedOutEarly(PlayerType player);
-
-        /// <summary>
-        /// Timed out
-        /// </summary>
-        void TimedOut();
-    }
+        /// <param name="info"></param>
+        void GameEnded(GameEndedInfo info);
+    }   
 }

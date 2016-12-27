@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace GameActor.Interfaces
 {
-    [DataContract(Namespace = Constants.DataContractNamespace)]
+    [DataContract]
     public class GameState
     {
         [DataMember]

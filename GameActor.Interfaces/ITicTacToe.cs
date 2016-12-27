@@ -25,7 +25,5 @@ namespace GameActor.Interfaces
         /// </summary>
         /// <param name="player">Player type.</param>
         Task<bool> Unregister(PlayerType player, bool earlyBailOut);
-
-        Task<GameStatus> CheckGameStatus();
     }
 }

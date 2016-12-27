@@ -5,7 +5,7 @@ namespace GameActor.Interfaces
     /// <summary>
     /// Holds the player type.
     /// </summary>
-    [DataContract(Namespace = Constants.DataContractNamespace)]
+    [DataContract]
     public enum PlayerType
     {
         [EnumMember]

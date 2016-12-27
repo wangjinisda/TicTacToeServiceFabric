@@ -5,7 +5,7 @@ namespace GameActor.Interfaces
     /// <summary>
     /// Holds the cell number.
     /// </summary>
-    [DataContract(Namespace = Constants.DataContractNamespace)]
+    [DataContract]
     public enum CellNumber
     {
         [EnumMember]

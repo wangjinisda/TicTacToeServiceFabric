@@ -76,10 +76,10 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameStatus.cs" />
+    <Compile Include="GamedEndedEventType.cs" />
+    <Compile Include="GameEndedInfo.cs" />
     <Compile Include="WinVector.cs" />
     <Compile Include="GameState.cs" />
-    <Compile Include="Constants.cs" />
     <Compile Include="CellNumber.cs" />
     <Compile Include="PlayerType.cs" />
     <Compile Include="MoveMetadata.cs" />

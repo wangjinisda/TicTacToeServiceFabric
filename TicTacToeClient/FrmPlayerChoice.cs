@@ -178,8 +178,6 @@ namespace Nelson.TicTacToe.Client
                 await game.Move(new MoveMetadata(PlayerType.Zero, CellNumber.Eighth));
                 await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.Ninth));
 
-                var gameStatus = await game.CheckGameStatus();
-
                 await game.Unregister(PlayerType.Cross, false);
                 await game.Unregister(PlayerType.Zero, false);
             }

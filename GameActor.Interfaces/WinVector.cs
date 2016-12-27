@@ -2,7 +2,7 @@
 
 namespace GameActor.Interfaces
 {
-    [DataContract(Namespace = Constants.DataContractNamespace)]
+    [DataContract]
     public enum WinVector
     {
         [EnumMember]
