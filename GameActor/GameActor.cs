@@ -52,30 +52,6 @@ namespace GameActor
             return await Task.FromResult(true);
         }
 
-        private async Task CheckStatusAndRaiseEvents(ITicTacToeEvents events)
-        {
-            var gameStatus = await CheckGameStatus();
-
-            if (gameStatus.Item1 != WinVector.NONE)
-            {
-                events.GameEnded(
-                    new GameEndedInfo
-                    {
-                        Player = gameStatus.Item3,
-                        EventType = GameEndedEventType.Won,
-                        WinVector = gameStatus.Item1
-                    });
-            }
-            else if (gameStatus.Item2)
-            {
-                events.GameEnded(
-                    new GameEndedInfo
-                    {
-                        EventType = GameEndedEventType.Tie
-                    });
-            }
-        }
-
         public async Task<bool> Register(PlayerType requestedPlayer)
         {
             var gameState = await StateManager.GetStateAsync<GameState>("GameState");
@@ -141,6 +117,24 @@ namespace GameActor
             return await Task.FromResult(removed);
         }
 
+        public async Task ReceiveReminderAsync(string reminderName, byte[] context, TimeSpan dueTime, TimeSpan period)
+        {
+            if (reminderName.Equals(REMINDER_NAME))
+            {
+                var gameState = await StateManager.GetStateAsync<GameState>("GameState");
+                gameState.Matrix = new MoveMetadata[3][]
+                            {
+                                        new MoveMetadata[3],
+                                        new MoveMetadata[3],
+                                        new MoveMetadata[3]
+                            };
+                await StateManager.SetStateAsync("GameState", gameState);
+
+                var events = GetEvent<ITicTacToeEvents>();
+                events.GameEnded(new GameEndedInfo { EventType = GameEndedEventType.TimedOut });
+            }
+        }
+
         /// <summary>
         /// This method is called whenever an actor is activated.
         /// An actor is activated the first time any of its methods are invoked.
@@ -161,6 +155,30 @@ namespace GameActor
                 Matrix = _moveMatrix,
                 Players = new List<PlayerType>()
             });
+        }
+        
+        private async Task CheckStatusAndRaiseEvents(ITicTacToeEvents events)
+        {
+            var gameStatus = await CheckGameStatus();
+
+            if (gameStatus.Item1 != WinVector.NONE)
+            {
+                events.GameEnded(
+                    new GameEndedInfo
+                    {
+                        Player = gameStatus.Item3,
+                        EventType = GameEndedEventType.Won,
+                        WinVector = gameStatus.Item1
+                    });
+            }
+            else if (gameStatus.Item2)
+            {
+                events.GameEnded(
+                    new GameEndedInfo
+                    {
+                        EventType = GameEndedEventType.Tie
+                    });
+            }
         }
 
         private void StoreGameState(GameState gameState, MoveMetadata moveMetadata)
@@ -201,7 +219,7 @@ namespace GameActor
             gameState.NextPlayer = (moveMetadata.Player == PlayerType.Cross) ? PlayerType.Zero : PlayerType.Cross;
         }
 
-        public async Task<Tuple<WinVector, bool, PlayerType>> CheckGameStatus()
+        private async Task<Tuple<WinVector, bool, PlayerType>> CheckGameStatus()
         {
             WinVector winVector = WinVector.NONE;
             PlayerType? player = null;
@@ -293,24 +311,6 @@ namespace GameActor
             }
 
             return (winVector != WinVector.NONE);
-        }
-
-        public async Task ReceiveReminderAsync(string reminderName, byte[] context, TimeSpan dueTime, TimeSpan period)
-        {
-            if (reminderName.Equals(REMINDER_NAME))
-            {
-                var gameState = await StateManager.GetStateAsync<GameState>("GameState");
-                gameState.Matrix = new MoveMetadata[3][]
-                            {
-                                        new MoveMetadata[3],
-                                        new MoveMetadata[3],
-                                        new MoveMetadata[3]
-                            };
-                await StateManager.SetStateAsync("GameState", gameState);
-
-                var events = GetEvent<ITicTacToeEvents>();
-                events.GameEnded(new GameEndedInfo { EventType = GameEndedEventType.TimedOut });
-            }
         }
     }
 }

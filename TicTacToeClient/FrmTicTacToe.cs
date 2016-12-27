@@ -76,7 +76,6 @@ namespace Nelson.TicTacToe.Client
                     MoveMetadata moveMetadata = new MoveMetadata(PlayerChoice.Value, GetCellNumber(clickedPoint));
 
                     await ActorProxy.Move(moveMetadata);
-                    _isYourTurn = false;
                 }
                 else
                 {
@@ -383,17 +382,11 @@ namespace Nelson.TicTacToe.Client
 
         #region ITicTacToeCallback Members
 
-        public void Registered(bool isCross)
-        {
-            if (isCross) _isYourTurn = true;
-        }
-
-
         public void GameStarted()
         {
              _gameStated = true;
 
-            if (_isYourTurn)
+            if (PlayerChoice.Value == PlayerType.Cross)
             {
                 toolStripStatus.Text = "Your turn";
             }

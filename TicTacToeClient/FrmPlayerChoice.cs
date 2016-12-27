@@ -88,7 +88,6 @@ namespace Nelson.TicTacToe.Client
                         return;
                     }
 
-                    _frmTicTacToe.Registered(_frmTicTacToe.PlayerChoice.Value == PlayerType.Cross);
                     Hide();
                     _frmTicTacToe.Show();
                 }
