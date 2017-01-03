@@ -2,6 +2,7 @@
 using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Client;
 using System;
+using System.Configuration;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -78,7 +79,7 @@ namespace Nelson.TicTacToe.Client
 
                     // Register Player.
                     bool registered = await _actorProxy.Register(_frmTicTacToe.PlayerChoice.Value);
-
+                    
                     if (!registered)
                     {
                         MessageBox.Show(string.Format(CultureInfo.InvariantCulture, "Reached the maximum player limit or the requested player type is not available for selection."),
@@ -135,7 +136,7 @@ namespace Nelson.TicTacToe.Client
         private ITicTacToe GetActorProxy()
         {
             var gameId = new ActorId(txtGameRoom.Text);
-            var game = ActorProxy.Create<ITicTacToe>(gameId, "fabric:/TicTacToe");
+            var game = ActorProxy.Create<ITicTacToe>(gameId, ConfigurationManager.AppSettings["TicTacToeServer"]);
             game.SubscribeAsync(_frmTicTacToe);
             return game;
         }
@@ -162,7 +163,7 @@ namespace Nelson.TicTacToe.Client
             foreach (int i in System.Linq.Enumerable.Range(0, 1000))
             {
                 var gameId = new ActorId("LoadTest"+i);
-                var game = ActorProxy.Create<ITicTacToe>(gameId, "fabric:/TicTacToe");
+                var game = ActorProxy.Create<ITicTacToe>(gameId, ConfigurationManager.AppSettings["TicTacToeServer"]);
 
                 await game.Register(PlayerType.Cross);
                 await game.Register(PlayerType.Zero);
