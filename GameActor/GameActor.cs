@@ -253,7 +253,6 @@ namespace GameActor
             ref WinVector winVector, 
             PlayerType player)
         {
-            bool skip = false;
             // Horizontal
             for (byte i = 0; i <= 2; i++)
             {
@@ -268,32 +267,28 @@ namespace GameActor
                     else if (i == 2)
                         winVector = WinVector.BOTTOM;
 
-                    // There can't be move than one filled horizontal rows.
-                    skip = true;
+                    return true;
                 }
             }
 
-            if (!skip)
+            // Vertical
+            for (byte i = 0; i <= 2; i++)
             {
-                // Vertical
-                for (byte i = 0; i <= 2; i++)
+                if ((moveMatrix[0][i] != null && moveMatrix[0][i].Player == player) &&
+                    (moveMatrix[1][i] != null && moveMatrix[1][i].Player == player) &&
+                    (moveMatrix[2][i] != null && moveMatrix[2][i].Player == player))
                 {
-                    if ((moveMatrix[0][i] != null && moveMatrix[0][i].Player == player) &&
-                        (moveMatrix[1][i] != null && moveMatrix[1][i].Player == player) &&
-                        (moveMatrix[2][i] != null && moveMatrix[2][i].Player == player))
-                    {
-                        if (i == 0)
-                            winVector = WinVector.LEFT;
-                        else if (i == 1)
-                            winVector = WinVector.MIDDLE;
-                        else if (i == 2)
-                            winVector = WinVector.RIGHT;
+                    if (i == 0)
+                        winVector = WinVector.LEFT;
+                    else if (i == 1)
+                        winVector = WinVector.MIDDLE;
+                    else if (i == 2)
+                        winVector = WinVector.RIGHT;
 
-                        // There can't be move than one filled vertical rows.
-                        skip = true;
-                    }
+                    return true;
                 }
             }
+            
 
             // Diagonal
             if ((moveMatrix[0][0] != null && moveMatrix[0][0].Player == player) &&
@@ -301,6 +296,7 @@ namespace GameActor
                 (moveMatrix[2][2] != null && moveMatrix[2][2].Player == player))
             {
                 winVector = WinVector.BACK_DIAGONAL;
+                return true;
             }
 
             if ((moveMatrix[0][2] != null && moveMatrix[0][2].Player == player) &&
@@ -308,9 +304,10 @@ namespace GameActor
                 (moveMatrix[2][0] != null && moveMatrix[2][0].Player == player))
             {
                 winVector = WinVector.FORWARD_DIAGONAL;
+                return true;
             }
 
-            return (winVector != WinVector.NONE);
+            return false;
         }
     }
 }

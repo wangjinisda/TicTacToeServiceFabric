@@ -388,10 +388,12 @@ namespace Nelson.TicTacToe.Client
 
             if (PlayerChoice.Value == PlayerType.Cross)
             {
+                _isYourTurn = true;
                 toolStripStatus.Text = "Your turn";
             }
             else
             {
+                _isYourTurn = false;
                 toolStripStatus.Text = "Not your turn";
             }
         }
