@@ -41,23 +41,28 @@ namespace GameActor
 
             StoreGameState(gameState, moveMetadata);
 
-            var events = GetEvent<ITicTacToeEvents>();
-            events.Moved(moveMetadata.Player, gameState.Matrix);
+            RaiseMovedEvent(moveMetadata, gameState);
 
             await StateManager.SetStateAsync("GameState", gameState);
-            
-            // Check game status
-            await CheckStatusAndRaiseEvents(events);
+
+            await RaiseGameEndedEvent();
 
             return await Task.FromResult(true);
+        }
+
+        private void RaiseMovedEvent(MoveMetadata moveMetadata, GameState gameState)
+        {
+            var events = GetEvent<ITicTacToeEvents>();
+            events.Moved(moveMetadata.Player, gameState.Matrix);
         }
 
         public async Task<bool> Register(PlayerType requestedPlayer)
         {
             var gameState = await StateManager.GetStateAsync<GameState>("GameState");
             var players = gameState.Players;
-            
-            if (players.Count == 2)
+            const int MAX_PLAYER_COUNT = 2;
+
+            if (players.Count == MAX_PLAYER_COUNT)
                 return await Task.FromResult(false); // TODO: consider returning exception.
 
             if (players.Contains(requestedPlayer))
@@ -65,23 +70,27 @@ namespace GameActor
 
             players.Add(requestedPlayer);
 
-            if (players.Count == 2)
+            if (players.Count == MAX_PLAYER_COUNT)
             {
-                var events = GetEvent<ITicTacToeEvents>();
-                events.GameStarted();
+                RaiseGameStartedEvent();
 
-                // Register reminder
-
+                // Register timeout reminder
                 _reminderRegistration = await RegisterReminderAsync(
-                 REMINDER_NAME,
-                 BitConverter.GetBytes(0),
-                 TimeSpan.FromMinutes(TIMEOUT_INTERVAL),
-                 TimeSpan.FromMilliseconds(-1));
+                     REMINDER_NAME,
+                     BitConverter.GetBytes(0),
+                     TimeSpan.FromMinutes(TIMEOUT_INTERVAL),
+                     TimeSpan.FromMilliseconds(-1));
             }
-            
+
             await StateManager.SetStateAsync("GameState", gameState);
             
             return await Task.FromResult(true);
+        }
+
+        private void RaiseGameStartedEvent()
+        {
+            var events = GetEvent<ITicTacToeEvents>();
+            events.GameStarted();
         }
 
         public async Task<bool> Unregister(PlayerType player, bool earlyBailOut)
@@ -94,22 +103,13 @@ namespace GameActor
             // Reset state if all users are exited
             if (players.Count == 0)
             {
-                gameState.Matrix = new MoveMetadata[3][]
-                                    {
-                                        new MoveMetadata[3],
-                                        new MoveMetadata[3],
-                                        new MoveMetadata[3]
-                                    };
-
-                gameState.NextPlayer = PlayerType.Cross;
-
+                gameState = GetInitialGameState();
                 await UnregisterReminderAsync(_reminderRegistration);
             }
 
             if (earlyBailOut)
             {
-                var events = GetEvent<ITicTacToeEvents>();
-                events.GameEnded(new GameEndedInfo { Player = player, EventType = GameEndedEventType.BailedOutEarly });
+                RaiseBailedOutEvent(player);
             }
 
             await StateManager.SetStateAsync("GameState", gameState);
@@ -117,22 +117,44 @@ namespace GameActor
             return await Task.FromResult(removed);
         }
 
+        private void RaiseBailedOutEvent(PlayerType player)
+        {
+            var events = GetEvent<ITicTacToeEvents>();
+            events.GameEnded(new GameEndedInfo { Player = player, EventType = GameEndedEventType.BailedOutEarly });
+        }
+
+        private static GameState GetInitialGameState()
+        {
+            return new GameState
+            {
+                Matrix = new MoveMetadata[3][]
+                                {
+                                        new MoveMetadata[3],
+                                        new MoveMetadata[3],
+                                        new MoveMetadata[3]
+                                },
+
+                NextPlayer = PlayerType.Cross,
+                Players = new List<PlayerType>()
+            };
+        }
+
         public async Task ReceiveReminderAsync(string reminderName, byte[] context, TimeSpan dueTime, TimeSpan period)
         {
             if (reminderName.Equals(REMINDER_NAME))
             {
                 var gameState = await StateManager.GetStateAsync<GameState>("GameState");
-                gameState.Matrix = new MoveMetadata[3][]
-                            {
-                                        new MoveMetadata[3],
-                                        new MoveMetadata[3],
-                                        new MoveMetadata[3]
-                            };
+                gameState = GetInitialGameState();
                 await StateManager.SetStateAsync("GameState", gameState);
 
-                var events = GetEvent<ITicTacToeEvents>();
-                events.GameEnded(new GameEndedInfo { EventType = GameEndedEventType.TimedOut });
+                RaiseTimedOutEvent();
             }
+        }
+
+        private void RaiseTimedOutEvent()
+        {
+            var events = GetEvent<ITicTacToeEvents>();
+            events.GameEnded(new GameEndedInfo { EventType = GameEndedEventType.TimedOut });
         }
 
         /// <summary>
@@ -142,23 +164,12 @@ namespace GameActor
         protected override Task OnActivateAsync()
         {
             ActorEventSource.Current.ActorMessage(this, "Actor activated.");
-
-            MoveMetadata[][] _moveMatrix = new MoveMetadata[3][] {          // 3x3 matrix to hold the move data of both the players.
-                 new MoveMetadata[3],
-                 new MoveMetadata[3],
-                 new MoveMetadata[3]
-            };   
-
-            return StateManager.TryAddStateAsync("GameState", new GameState
-            {
-                NextPlayer = PlayerType.Cross,
-                Matrix = _moveMatrix,
-                Players = new List<PlayerType>()
-            });
+            return StateManager.TryAddStateAsync("GameState",  GetInitialGameState());
         }
         
-        private async Task CheckStatusAndRaiseEvents(ITicTacToeEvents events)
+        private async Task RaiseGameEndedEvent()
         {
+            var events = GetEvent<ITicTacToeEvents>();
             var gameStatus = await CheckGameStatus();
 
             if (gameStatus.Item1 != WinVector.NONE)
