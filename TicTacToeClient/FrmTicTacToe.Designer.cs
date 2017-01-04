@@ -1,4 +1,4 @@
-﻿namespace Nelson.TicTacToe.Client
+﻿namespace TicTacToe.Client
 {
     partial class FrmTicTacToe
     {

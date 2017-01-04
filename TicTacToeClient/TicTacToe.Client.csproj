@@ -8,8 +8,8 @@
     <ProjectGuid>{2D043477-0BF4-473B-AB3D-5F28EE6673DA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Nelson.TicTacToe.Client</RootNamespace>
-    <AssemblyName>Nelson.TicTacToe.Client</AssemblyName>
+    <RootNamespace>TicTacToe.Client</RootNamespace>
+    <AssemblyName>TicTacToe.Client</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>

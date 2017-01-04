@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Windows.Forms;
 
-namespace Nelson.TicTacToe.Client
+namespace TicTacToe.Client
 {
     internal partial class FrmTicTacToe : Form, ITicTacToeEvents
     {

@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Nelson.TicTacToe.Client
+namespace TicTacToe.Client
 {
     internal partial class FrmPlayerChoice : Form
     {

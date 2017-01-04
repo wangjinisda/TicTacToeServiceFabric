@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Nelson.TicTacToe.Client
+namespace TicTacToe.Client
 {
     internal static class Program
     {

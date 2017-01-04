@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameActor", "GameActor\Game
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameActor.Interfaces", "GameActor.Interfaces\GameActor.Interfaces.csproj", "{F182C221-18EE-45BB-8DF9-03F714BE8C08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nelson.TicTacToe.Client", "TicTacToeClient\Nelson.TicTacToe.Client.csproj", "{2D043477-0BF4-473B-AB3D-5F28EE6673DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe.Client", "TicTacToeClient\TicTacToe.Client.csproj", "{2D043477-0BF4-473B-AB3D-5F28EE6673DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
