@@ -146,6 +146,7 @@
             this.Name = "FrmPlayerChoice";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TicTacToe";
+            this.Load += new System.EventHandler(this.FrmPlayerChoice_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

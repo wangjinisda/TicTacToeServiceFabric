@@ -7,10 +7,10 @@ using System.Windows.Forms;
 
 namespace TicTacToe.Client
 {
-    internal partial class FrmTicTacToe : Form, ITicTacToeEvents
+    internal partial class FrmTicTacToe : Form, ITicTacToeEvents, ITicTacToeView
     {
         private System.Threading.SynchronizationContext _synchronizationContext;// Synchronization context for UI thread
-        private WinVector _winVectorsToPaint = new WinVector();                 // Holds instructions for painting on the screen.
+        private WinVector _winVector = new WinVector();                         // Holds instructions for painting on the screen.
         private MoveMetadata[][] _moveMatrix = new MoveMetadata[3][] {          // 3x3 matrix to hold the move data of both the players.
              new MoveMetadata[3],
              new MoveMetadata[3],
@@ -137,7 +137,7 @@ namespace TicTacToe.Client
         {
             // Paint Win Vectors.
             Pen greenPen = new Pen(Color.Green, 4F);
-            switch (_winVectorsToPaint)
+            switch (_winVector)
             {
                 case WinVector.TOP:
                     _graphics.DrawLine(greenPen, new Point(0, 50), new Point(300, 50));
@@ -414,7 +414,7 @@ namespace TicTacToe.Client
             switch (info.EventType)
             {
                 case GameEndedEventType.Won:
-                    _winVectorsToPaint = info.WinVector;
+                    _winVector = info.WinVector;
                     Invalidate();
 
                     GameEndedCommon(info.Player, "{0} has won the game !");
@@ -454,12 +454,20 @@ namespace TicTacToe.Client
 
         #region Properties
 
-        public PlayerType? PlayerChoice { get; internal set; }
-        public string GameRoom { get; internal set; }
-        public string Player { get; internal set; }
-        public ITicTacToe ActorProxy { get; internal set; }
+        public PlayerType? PlayerChoice { get;  set; }
+        public string GameRoom { get;  set; }
+        public string Player { get;  set; }
+        public ITicTacToe ActorProxy { get;  set; }
 
         #endregion
+    }
+
+    public interface ITicTacToeView
+    {
+        PlayerType? PlayerChoice { get; set; }
+        string GameRoom { get;  set; }
+        string Player { get; set; }
+        ITicTacToe ActorProxy { get; set; }
     }
 
     internal static class Extensions

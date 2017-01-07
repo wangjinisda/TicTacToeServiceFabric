@@ -9,77 +9,208 @@ using System.Windows.Forms;
 
 namespace TicTacToe.Client
 {
-    internal partial class FrmPlayerChoice : Form
+    internal partial class FrmPlayerChoice : Form, IPlayerProfileView
     {
-        private ITicTacToe _actorProxy;                                         // Actor proxy.
         private FrmTicTacToe _frmTicTacToe = new FrmTicTacToe();
+        private IPlayerProfilePresenter _presentor;
 
+        public PlayerType? PlayerType
+        {
+            get
+            {
+                PlayerType player;
+                if (Enum.TryParse(cbPlayerChoice.Text, out player))
+                {
+                    return player;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public string GameRoom
+        {
+            get
+            {
+                return txtGameRoom.Text;
+            }
+        }
+
+        public string PlayerName
+        {
+            get
+            {
+                return txtPlayer.Text;
+            }
+        }
+        
         public FrmPlayerChoice()
         {
             InitializeComponent();
         }
 
-        private bool ValidateFields()
+        private void btnStartGame_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtGameRoom.Text))
+            _presentor.StartGame();
+        }
+
+        private void btnEndGame_Click(object sender, EventArgs e)
+        {
+            _presentor.EndGame();
+        }
+
+        private async void btnLoadTest_Click(object sender, EventArgs e)
+        {
+            //foreach (int i in System.Linq.Enumerable.Range(0, 1000))
+            //{
+            //    var gameId = new ActorId("LoadTest" + i);
+            //    var game = ActorProxy.Create<ITicTacToe>(gameId, ConfigurationManager.AppSettings["TicTacToeServer"]);
+
+            //    await game.Register(PlayerType.Cross);
+            //    await game.Register(PlayerType.Zero);
+
+            //    await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.First));
+            //    await game.Move(new MoveMetadata(PlayerType.Zero, CellNumber.Second));
+            //    await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.Third));
+            //    await game.Move(new MoveMetadata(PlayerType.Zero, CellNumber.Forth));
+            //    await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.First));
+            //    await game.Move(new MoveMetadata(PlayerType.Zero, CellNumber.Sixth));
+            //    await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.Seventh));
+            //    await game.Move(new MoveMetadata(PlayerType.Zero, CellNumber.Eighth));
+            //    await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.Ninth));
+
+            //    await game.Unregister(PlayerType.Cross, false);
+            //    await game.Unregister(PlayerType.Zero, false);
+            //}
+        }
+
+        private void FrmPlayerChoice_Load(object sender, EventArgs e)
+        {
+            _presentor = new PlayerProfilePresenter(this, _frmTicTacToe, _frmTicTacToe);
+            _presentor.ProfileValidationError += _presentor_ProfileValidationError;
+            _presentor.ConnectedToGameServer += _presentor_ConnectedToGameServer;
+        }
+
+        private void _presentor_ConnectedToGameServer(object sender, EventArgs e)
+        {
+            Hide();
+            _frmTicTacToe.Show();
+        }
+
+        private void _presentor_ProfileValidationError(object sender, ProfileValidationEventArgs e)
+        {
+            if (!e.IsValid)
             {
-                MessageBox.Show("Please enter an existing or new game room you want to join.", "TicTacToe", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                txtGameRoom.Focus();
+                MessageBox.Show(e.ErrorMessage, "TicTacToe", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+    }
+
+    internal interface IPlayerProfilePresenter
+    {
+        void StartGame();
+        void EndGame();
+
+        event EventHandler<ProfileValidationEventArgs> ProfileValidationError;
+
+        event EventHandler<EventArgs> ConnectedToGameServer;
+    }
+
+    public class ProfileValidationEventArgs : EventArgs
+    {
+        public bool IsValid { get; set; }
+
+        public string ErrorMessage { get; set; }
+    }
+
+    internal interface IPlayerProfileView
+    {
+        PlayerType? PlayerType { get; }
+
+        string GameRoom { get; }
+
+        string PlayerName { get; }
+    }
+
+    internal class PlayerProfilePresenter : IPlayerProfilePresenter
+    {
+        public event EventHandler<ProfileValidationEventArgs> ProfileValidationError;
+        public event EventHandler<EventArgs> ConnectedToGameServer;
+
+        private IPlayerProfileView _view;
+        private ITicTacToeView _gameView;
+        private ITicTacToeEvents _events;
+
+
+        public PlayerProfilePresenter(IPlayerProfileView view, ITicTacToeView gameView, ITicTacToeEvents events)
+        {
+            _view = view;
+            _gameView = gameView;
+            _events = events;
+        }
+
+        public void EndGame()
+        {
+            Application.Exit();
+        }
+
+        public void StartGame()
+        {
+            string validationMessage = string.Empty;
+            if (!ValidationProfile(ref validationMessage))
+            {
+                ProfileValidationError(this, new ProfileValidationEventArgs { IsValid = false, ErrorMessage = validationMessage });
+                return;
+            }
+
+            SetProfile();
+
+            ConnectToGameServer();
+        }
+
+        private bool ValidationProfile(ref string validationMessage)
+        {
+            if (string.IsNullOrWhiteSpace(_view.GameRoom))
+            {
+                validationMessage = "Please enter an existing or new game room you want to join.";
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtPlayer.Text))
+            if (string.IsNullOrWhiteSpace(_view.PlayerName))
             {
-                MessageBox.Show("Please enter the player name.", "TicTacToe", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                txtPlayer.Focus();
+                validationMessage = "Please enter the player name.";
                 return false;
             }
 
-            string playerChoice = cbPlayerChoice.SelectedItem as string;
-            if (playerChoice == null)
+            if (_view.PlayerType == null)
             {
-                MessageBox.Show("Please select a player type.", "TicTacToe", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                cbPlayerChoice.Focus();
+                validationMessage = "Please select a player type.";
                 return false;
             }
 
             return true;
         }
 
-        private async void btnStartGame_Click(object sender, EventArgs e)
+        private void SetProfile()
         {
-            // Validate fields
-            if (!ValidateFields()) return;
-
-            // Store
-            StoreFields();
-
-            // Register and retry on transient error using exponential backoff algorithm
-            await ConnectToGameServer();
+            _gameView.PlayerChoice = _view.PlayerType;
+            _gameView.GameRoom = _view.GameRoom;
+            _gameView.Player = _view.PlayerName;
         }
 
-        private async Task ConnectToGameServer()
+        private void ConnectToGameServer()
         {
-            const int MAX_RETRIES = 3;
-            const int MAX_WAIT_INTERVAL = 60000;
-            int retries = 0;
-            bool retry = false;
+            ITicTacToe _actorProxy;
 
-            do
-            {
-                try
+            RetryPolicy.ExponentialRetry(
+                async () =>
                 {
-                    int waitTime = Math.Min(GetWaitTimeExp(retries), MAX_WAIT_INTERVAL);
-
-                    // Wait for the result.
-                    await Task.Delay(waitTime);
-
                     _actorProxy = GetActorProxy();
-                    _frmTicTacToe.ActorProxy = _actorProxy;
 
-                    // Register Player.
-                    bool registered = await _actorProxy.Register(_frmTicTacToe.PlayerChoice.Value);
-                    
+                    bool registered = await _actorProxy.Register(_view.PlayerType.Value);
+
                     if (!registered)
                     {
                         MessageBox.Show(string.Format(CultureInfo.InvariantCulture, "Reached the maximum player limit or the requested player type is not available for selection."),
@@ -89,11 +220,12 @@ namespace TicTacToe.Client
                         return;
                     }
 
-                    Hide();
-                    _frmTicTacToe.Show();
-                }
-                catch (Exception ex)
+                    _gameView.ActorProxy = _actorProxy;
+                    ConnectedToGameServer(this, EventArgs.Empty);
+                },
+                (ex) =>
                 {
+                    var retry = false;
                     // Retry for transient fault
                     System.Fabric.FabricException fabricException = ex as System.Fabric.FabricException;
                     if (fabricException.ErrorCode == System.Fabric.FabricErrorCode.ServiceNotFound)
@@ -113,32 +245,49 @@ namespace TicTacToe.Client
                         retry = false;
                         MessageBox.Show(ex.Message);
                     }
-                }
-            } while (retry && (retries++ < MAX_RETRIES));
+                    return retry;
+                });
         }
 
-        private void StoreFields()
-        {
-            string playerChoice = cbPlayerChoice.SelectedItem as string;
-            if (playerChoice == "Cross")
-            {
-                _frmTicTacToe.PlayerChoice = PlayerType.Cross;
-            }
-            else if (playerChoice == "Zero")
-            {
-                _frmTicTacToe.PlayerChoice = PlayerType.Zero;
-            }
-
-            _frmTicTacToe.GameRoom = txtGameRoom.Text;
-            _frmTicTacToe.Player = txtPlayer.Text;
-        }
 
         private ITicTacToe GetActorProxy()
         {
-            var gameId = new ActorId(txtGameRoom.Text);
+            var gameId = new ActorId(_view.GameRoom);
             var game = ActorProxy.Create<ITicTacToe>(gameId, ConfigurationManager.AppSettings["TicTacToeServer"]);
-            game.SubscribeAsync(_frmTicTacToe);
+            game.SubscribeAsync(_events);
             return game;
+        }
+    }
+
+    public class RetryPolicy
+    {
+        /// <summary>
+        /// Retry on transient error using exponential backoff algorithm.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="exceptionLogic"></param>
+        public async static void ExponentialRetry(Action action, Func<Exception, bool> exceptionLogic)
+        {
+            const int MAX_RETRIES = 3;
+            const int MAX_WAIT_INTERVAL = 60000;
+            int retries = 0;
+            bool retry = false;
+
+            do
+            {
+                try
+                {
+                    int waitTime = Math.Min(GetWaitTimeExp(retries), MAX_WAIT_INTERVAL);
+
+                    await Task.Delay(waitTime);
+
+                    action();
+                }
+                catch (Exception ex)
+                {
+                    retry = exceptionLogic(ex);
+                }
+            } while (retry && (retries++ < MAX_RETRIES));
         }
 
         /// <summary>
@@ -146,41 +295,12 @@ namespace TicTacToe.Client
         /// </summary>
         /// <param name="retryCount"></param>
         /// <returns></returns>
-        private int GetWaitTimeExp(int retryCount)
+        private static int GetWaitTimeExp(int retryCount)
         {
             int waitTime = (int)(Math.Pow(2, retryCount) * 100);
 
             return waitTime;
         }
-
-        private void btnEndGame_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private async void btnLoadTest_Click(object sender, EventArgs e)
-        {
-            foreach (int i in System.Linq.Enumerable.Range(0, 1000))
-            {
-                var gameId = new ActorId("LoadTest"+i);
-                var game = ActorProxy.Create<ITicTacToe>(gameId, ConfigurationManager.AppSettings["TicTacToeServer"]);
-
-                await game.Register(PlayerType.Cross);
-                await game.Register(PlayerType.Zero);
-
-                await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.First));
-                await game.Move(new MoveMetadata(PlayerType.Zero, CellNumber.Second));
-                await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.Third));
-                await game.Move(new MoveMetadata(PlayerType.Zero, CellNumber.Forth));
-                await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.First));
-                await game.Move(new MoveMetadata(PlayerType.Zero, CellNumber.Sixth));
-                await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.Seventh));
-                await game.Move(new MoveMetadata(PlayerType.Zero, CellNumber.Eighth));
-                await game.Move(new MoveMetadata(PlayerType.Cross, CellNumber.Ninth));
-
-                await game.Unregister(PlayerType.Cross, false);
-                await game.Unregister(PlayerType.Zero, false);
-            }
-        }
     }
 }
+
