@@ -19,5 +19,9 @@ namespace GameActor.Interfaces
 
         [DataMember]
         public CellNumber CellNumber { get; private set; }
+
+
+        [DataMember]
+        public PlayerProfileModel PlayerProfileModel { get; set; }
     }
 }

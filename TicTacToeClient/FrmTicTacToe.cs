@@ -1,9 +1,12 @@
-﻿using GameActor.Interfaces;
+﻿using ClientProxyCommon;
+using GameActor.Interfaces;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using TicTacToe.Client.source;
 
 namespace TicTacToe.Client
 {
@@ -74,6 +77,13 @@ namespace TicTacToe.Client
                 if (!HasValueInCell(clickedPoint))
                 {
                     MoveMetadata moveMetadata = new MoveMetadata(PlayerChoice.Value, GetCellNumber(clickedPoint));
+                    moveMetadata.PlayerProfileModel = new PlayerProfileModel
+                    {
+                        PlayerType = PlayerChoice.Value,
+                        GameRoom = GameRoom,
+                        PlayerName = Player
+
+                    };
 
                     await ActorProxy.Move(moveMetadata);
                 }
@@ -110,7 +120,15 @@ namespace TicTacToe.Client
                 }
                 else
                 {
-                    ActorProxy.Unregister(PlayerChoice.Value, true);
+                    //ActorProxy.Unregister(PlayerChoice.Value, true);
+
+                    ActorProxy.Unregister(new PlayerProfileModel
+                    {
+                        PlayerType = PlayerChoice.Value,
+                        GameRoom = GameRoom,
+                        PlayerName = Player
+
+                    }, true);
                 }
             }
         }
@@ -118,6 +136,8 @@ namespace TicTacToe.Client
         private void frmTicTacToe_FormClosed(object sender, FormClosedEventArgs e)
         {
             // Since frmPlayerChoice is hidden.
+
+            ActorProxy.CloseAsync();
             Application.Exit();
         }
 
@@ -396,6 +416,7 @@ namespace TicTacToe.Client
                 _isYourTurn = false;
                 toolStripStatus.Text = "Not your turn";
             }
+            //return Task.CompletedTask;
         }
 
         public void Moved(PlayerType player, MoveMetadata[][] moveMatrix)
@@ -407,6 +428,7 @@ namespace TicTacToe.Client
             _isYourTurn = (PlayerChoice.Value == player) ? false : true;
 
             toolStripStatus.Text = _isYourTurn ? "Your turn" : "Not your turn";
+           // return Task.CompletedTask;
         }
 
         public void GameEnded(GameEndedInfo info)
@@ -429,6 +451,8 @@ namespace TicTacToe.Client
                     GameEndedCommon(info.Player, "{0} has end the game.");
                     break;
             }
+
+            //return Task.CompletedTask;
         }
         private void GameEndedCommon(PlayerType player, string message)
         {
@@ -437,7 +461,15 @@ namespace TicTacToe.Client
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
 
-            ActorProxy.Unregister(PlayerChoice.Value, true);
+            //ActorProxy.Unregister(PlayerChoice.Value, true);
+
+            ActorProxy.Unregister(new PlayerProfileModel
+            {
+                PlayerType = PlayerChoice.Value,
+                GameRoom = GameRoom,
+                PlayerName = Player
+
+            }, true);
 
             _closeSilently = true;
 
@@ -455,27 +487,14 @@ namespace TicTacToe.Client
         #region Properties
 
         public PlayerType? PlayerChoice { get;  set; }
+
         public string GameRoom { get;  set; }
+
         public string Player { get;  set; }
-        public ITicTacToe ActorProxy { get;  set; }
+
+        public ITicTacToeProxy ActorProxy { get;  set; }
 
         #endregion
     }
 
-    public interface ITicTacToeView
-    {
-        PlayerType? PlayerChoice { get; set; }
-        string GameRoom { get;  set; }
-        string Player { get; set; }
-        ITicTacToe ActorProxy { get; set; }
-    }
-
-    internal static class Extensions
-    {
-        public static bool Between(this Point clickedPoint, Point first, Point second)
-        {
-            return ((clickedPoint.X >= first.X && clickedPoint.X <= second.X) &&
-                (clickedPoint.Y >= first.Y && clickedPoint.Y <= second.Y));
-        }
-    }
 }

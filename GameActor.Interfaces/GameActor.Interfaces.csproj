@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="GamedEndedEventType.cs" />
     <Compile Include="GameEndedInfo.cs" />
+    <Compile Include="PlayerProfileModel.cs" />
     <Compile Include="WinVector.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="CellNumber.cs" />

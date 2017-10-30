@@ -1,5 +1,6 @@
 ﻿using Microsoft.ServiceFabric.Actors;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
 namespace GameActor.Interfaces
 {
