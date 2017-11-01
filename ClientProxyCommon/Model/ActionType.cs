@@ -13,7 +13,6 @@ namespace ClientProxyCommon.Model
         [EnumMember]
         Call = 0,
 
-
         [EnumMember]
         Back = 1,
     }

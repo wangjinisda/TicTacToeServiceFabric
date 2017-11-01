@@ -10,7 +10,7 @@ namespace WebConnector.Source
 {
     public class TicTacToeEventsSimulation : ITicTacToeEvents
     {
-        private IWebSocket _webSocket;
+        private readonly IWebSocket _webSocket;
 
         public TicTacToeEventsSimulation(IWebSocket webSocket)
         {
@@ -31,7 +31,7 @@ namespace WebConnector.Source
 
         public void GameStarted()
         {
-            //var box = ContentBox.CreateFromObject(info);
+            // var box = ContentBox.CreateFromObject(info);
             _webSocket.SendResult(new ActionData
             {
                 ActionType = ActionType.Call,
@@ -43,7 +43,8 @@ namespace WebConnector.Source
         {
             var param = new ContentBox[] {
                 ContentBox.CreateFromObject(player),
-                ContentBox.CreateFromObject(moveMatrix) };
+                ContentBox.CreateFromObject(moveMatrix)
+            };
 
             var box = ContentBox.CreateFromObject(param);
 

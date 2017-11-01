@@ -15,8 +15,7 @@ namespace ClientProxyCommon.Abstractions
 {
     public abstract class WebSocketServerBase : IWebSocketServer
     {
-
-        private ManualResetEventSlim _mre = new ManualResetEventSlim(false);
+        private readonly ManualResetEventSlim _mre = new ManualResetEventSlim(false);
 
         protected WebSocket _websocket;
 
@@ -27,14 +26,14 @@ namespace ClientProxyCommon.Abstractions
         protected ConcurrentDictionary<string, TaskCompletionSource<ActionData>> _dic =
             new ConcurrentDictionary<string, TaskCompletionSource<ActionData>>();
 
-        protected ConcurrentQueue<ActionData> _queue = 
+        protected ConcurrentQueue<ActionData> _queue =
             new ConcurrentQueue<ActionData>();
-
 
         public virtual Delegates.ActionDelegate ActionDelegate => _actionDelegate;
 
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
-        public WebSocketServerBase(WebSocket websocket, ISocketCaller socketCaller)
+        protected WebSocketServerBase(WebSocket websocket, ISocketCaller socketCaller)
         {
             _websocket = websocket;
             _socketCaller = socketCaller;
@@ -44,7 +43,7 @@ namespace ClientProxyCommon.Abstractions
 
             ThreadShell.LongRun(async() =>
             {
-                while (true)
+                while (!_cancellationTokenSource.IsCancellationRequested)
                 {
                     try
                     {
@@ -57,11 +56,9 @@ namespace ClientProxyCommon.Abstractions
                         Debug.WriteLine($"hellow world server:   {e.Message}");
                         continue;
                     }
-                    
                 }
-            });
+            }, _cancellationTokenSource);
         }
-
 
         public virtual void ActionDelegateInitial()
         {
@@ -69,12 +66,10 @@ namespace ClientProxyCommon.Abstractions
             {
                 if (action.ActionType == ActionType.Call)
                 {
-
                     await _socketCaller.CallAsync(action, ret => {
                         SendResult(ret);
                         return Task.CompletedTask;
                     });
-
                 }
                 else
                 {
@@ -86,18 +81,15 @@ namespace ClientProxyCommon.Abstractions
             };
         }
 
-
         public virtual void EventSet()
         {
             _mre.Set();
         }
 
-
         public virtual void WaitOne()
         {
             _mre.Wait();
         }
-
 
         public virtual void EnequeueActionData(ActionData data)
         {
@@ -107,21 +99,19 @@ namespace ClientProxyCommon.Abstractions
 
         public virtual Task ConsumeActionDatas()
         {
-            if(_queue.Count() > 0)
+            if(_queue.Count > 0)
             {
                 var ret = _queue.TryDequeue(out var data);
 
-                //return processor(new[]{ data });
+                // return processor(new[]{ data });
             }
 
             return Task.CompletedTask;
-            
         }
-
 
         public virtual Task ConsumeActionData()
         {
-            if (_queue.Count() > 0)
+            if (_queue.Count > 0)
             {
                 var ret = _queue.TryDequeue(out var data);
 
@@ -129,22 +119,19 @@ namespace ClientProxyCommon.Abstractions
             }
 
             return Task.CompletedTask;
-
         }
-
 
         public void Dispose()
         {
             _websocket.Dispose();
         }
 
-        public void SendResult(ActionData box, Action before = null)
+        public void SendResult(ActionData box)
         {
             EnequeueActionData(box);
         }
 
         public abstract Task<ActionData> SendWithCnfirmAsync(ActionData box, Action before = null);
-
 
         public virtual Task SendLogic(ActionData box)
         {
@@ -153,11 +140,11 @@ namespace ClientProxyCommon.Abstractions
                 new ArraySegment<byte>(box.AsBytes()),
                 WebSocketMessageType.Binary,
                 true, CancellationToken.None);
-
         }
 
         public async void CloseAsync()
         {
+            _cancellationTokenSource.Cancel();
             await _websocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "pls close!", CancellationToken.None);
         }
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ClientProxyCommon
 {
-    public class Delegates
+    public static class Delegates
     {
         public delegate Task ActionDelegate(ActionData data);
     }

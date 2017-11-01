@@ -17,7 +17,6 @@ namespace ClientProxyCommon.Model
             _id = id;
         }
 
-
         public ActionData()
         {
             _id = Guid.NewGuid().ToString();

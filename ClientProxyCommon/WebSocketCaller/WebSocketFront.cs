@@ -14,17 +14,17 @@ namespace ClientProxyCommon.WebSocketCaller
 {
     public class WebSocketFront : IWebSocket
     {
+        private readonly ConcurrentDictionary<string, TaskCompletionSource<ActionData>> _dic =
 
-        private ConcurrentDictionary<string, TaskCompletionSource<ActionData>> _dic = 
-            
                                 new ConcurrentDictionary<string, TaskCompletionSource<ActionData>>();
 
-        private ClientWebSocket _websocket;
+        private readonly ClientWebSocket _websocket;
 
-        private ISocketCaller _socketCaller;
+        private readonly ISocketCaller _socketCaller;
 
-        private ManualResetEventSlim _mre = new ManualResetEventSlim(false);
+        private readonly ManualResetEventSlim _mre = new ManualResetEventSlim(false);
 
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         public Delegates.ActionDelegate ActionDelegate { get; }
 
@@ -38,19 +38,17 @@ namespace ClientProxyCommon.WebSocketCaller
             {
                 if (action.ActionType == ActionType.Call)
                 {
-
                     await _socketCaller.CallAsync(action, ret => {
                         SendResult(ret);
                         return Task.CompletedTask;
                     });
-
                 }
                 else
                 {
                     _dic.TryRemove(action.UniqueID, out var task);
                     task?.SetResult(action);
                     await Task.CompletedTask;
-                    //Console.WriteLine("Laputa says: " + e.Data);
+                    // Console.WriteLine("Laputa says: " + e.Data);
                 }
             };
 
@@ -62,18 +60,16 @@ namespace ClientProxyCommon.WebSocketCaller
                 _mre.Set();
                 var buffer = new byte[1024 * 4];
                 WebSocketReceiveResult result = await _websocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                while (!result.CloseStatus.HasValue)
+                while (!result.CloseStatus.HasValue && !_cancellationTokenSource.IsCancellationRequested)
                 {
                     try
                     {
-                        
                         if (result.MessageType == WebSocketMessageType.Binary)
                         {
                             var content = buffer.AsActionData(result.Count);
                             await ActionDelegate(content);
-
                         }
-                        //Console.WriteLine($"hellow world:   {ret}");
+                        // Console.WriteLine($"hellow world:   {ret}");
 
                         result = await _websocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
                     }  catch(Exception e)
@@ -81,14 +77,10 @@ namespace ClientProxyCommon.WebSocketCaller
                         Debug.WriteLine($"hellow world:   {e.Message}");
                         await _websocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
                     }
-
                 }
 
                 await _websocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
             });
-
-
-
         }
 
         public void Dispose()
@@ -127,6 +119,7 @@ namespace ClientProxyCommon.WebSocketCaller
 
         public async void CloseAsync()
         {
+            _cancellationTokenSource.Cancel();
             await _websocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "pls close!", CancellationToken.None);
         }
     }

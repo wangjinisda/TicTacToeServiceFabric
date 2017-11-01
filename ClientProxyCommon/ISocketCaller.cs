@@ -13,7 +13,6 @@ namespace ClientProxyCommon
 
         IWebSocket WebSocket { get;}
 
-
         void SetWebSocket(IWebSocket webSocket);
     }
 }

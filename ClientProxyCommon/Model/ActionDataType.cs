@@ -13,7 +13,6 @@ namespace ClientProxyCommon.Model
         [EnumMember]
         Composed = 0,
 
-
         [EnumMember]
         Single = 1,
     }

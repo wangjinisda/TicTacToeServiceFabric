@@ -15,15 +15,6 @@ namespace WebConnector.Source
 
         private ActorHelper _actorHelper;
 
-        public ActorSocketCaller()
-        {
-            //_webSocket = webSocket;
-
-           // _ticTacToeEvents = new TicTacToeEventsSimulation(_webSocket);
-
-            //_actorHelper = new ActorHelper(_webSocket);
-        }
-
         public async Task CallAsync(ActionData actionData, Func<ActionData, Task> back = null)
         {
             ActionData outs = null;
@@ -34,9 +25,11 @@ namespace WebConnector.Source
                         var meta = (MoveMetadata)actionData.ContentBox.AsSpecific();
                         var service = _actorHelper.GetActor(meta.PlayerProfileModel.GameRoom);
                         var ret = await service.Move(meta);
-                        outs = new ActionData(actionData.UniqueID);
-                        outs.ActionType = ActionType.Back;
-                        outs.MethodType = MethodType.Move;
+                        outs = new ActionData(actionData.UniqueID)
+                        {
+                            ActionType = ActionType.Back,
+                            MethodType = MethodType.Move
+                        };
                         if (ret)
                         {
                             outs.ContentBox = ContentBox.CreateFromObject(true);
@@ -52,10 +45,12 @@ namespace WebConnector.Source
                     {
                         var meta = (PlayerProfileModel)actionData.ContentBox.AsSpecific();
                         var service = _actorHelper.GetActor(meta.GameRoom);
-                        var ret = await service.Register(meta);
-                        outs = new ActionData(actionData.UniqueID);
-                        outs.ActionType = ActionType.Back;
-                        outs.MethodType = MethodType.Register;
+                        var ret = await service.Register(meta).ConfigureAwait(false);
+                        outs = new ActionData(actionData.UniqueID)
+                        {
+                            ActionType = ActionType.Back,
+                            MethodType = MethodType.Register
+                        };
                         if (ret)
                         {
                             outs.ContentBox = ContentBox.CreateFromObject(true);
@@ -71,10 +66,12 @@ namespace WebConnector.Source
                     {
                         var meta = (UnregisterModel)actionData.ContentBox.AsSpecific();
                         var service = _actorHelper.GetActor(meta.PlayerProfileModel.GameRoom);
-                        var ret = await service.Unregister(meta.PlayerProfileModel, meta.IfEarlyBailOut);
-                        outs = new ActionData(actionData.UniqueID);
-                        outs.ActionType = ActionType.Back;
-                        outs.MethodType = MethodType.UnRegister;
+                        var ret = await service.Unregister(meta.PlayerProfileModel, meta.IfEarlyBailOut).ConfigureAwait(false);
+                        outs = new ActionData(actionData.UniqueID)
+                        {
+                            ActionType = ActionType.Back,
+                            MethodType = MethodType.UnRegister
+                        };
                         if (ret)
                         {
                             outs.ContentBox = ContentBox.CreateFromObject(true);
@@ -86,7 +83,6 @@ namespace WebConnector.Source
                     }
 
                     break;
-
             }
 
             await back?.Invoke(outs);

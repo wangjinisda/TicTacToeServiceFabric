@@ -31,8 +31,6 @@ namespace ClientProxyCommon.Extensions
             }
         }
 
-
-
         public static ActionData AsActionData(this byte[] bytes)
         {
             using (var ms = new MemoryStream(bytes))

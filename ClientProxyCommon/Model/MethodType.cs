@@ -27,7 +27,5 @@ namespace ClientProxyCommon.Model
 
         [EnumMember]
         GameEnded = 5,
-
-
     }
 }

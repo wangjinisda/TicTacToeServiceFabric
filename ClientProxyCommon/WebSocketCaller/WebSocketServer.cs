@@ -14,26 +14,23 @@ namespace ClientProxyCommon.WebSocketCaller
 {
     public class WebSocketServer: IWebSocket
     {
-        private ISocketCaller _socketCaller;
+        private readonly ISocketCaller _socketCaller;
 
-        private WebSocket _websocket;
+        private readonly WebSocket _websocket;
 
-        private ActionDelegate _actionDelegate = null;
+        private readonly ConcurrentDictionary<string, TaskCompletionSource<ActionData>> _dic =
+            new ConcurrentDictionary<string, TaskCompletionSource<ActionData>>();
 
-        private ConcurrentDictionary<string, TaskCompletionSource<ActionData>> 
-            _dic = new ConcurrentDictionary<string, TaskCompletionSource<ActionData>>();
-
-        public Delegates.ActionDelegate ActionDelegate => _actionDelegate;
+        public Delegates.ActionDelegate ActionDelegate { get; } = null;
 
         public WebSocketServer(WebSocket websocket, ISocketCaller socketCaller)
         {
             _socketCaller = socketCaller;
             _socketCaller.SetWebSocket(this);
 
-
             _websocket = websocket;
 
-            _actionDelegate = action =>
+            ActionDelegate = action =>
             {
                 if (action.ActionType == ActionType.Call)
                 {
@@ -47,7 +44,7 @@ namespace ClientProxyCommon.WebSocketCaller
                     _dic.TryRemove(action.UniqueID, out var task);
                     task?.SetResult(action);
                     return Task.CompletedTask;
-                    //Console.WriteLine("Laputa says: " + e.Data);
+                    // Console.WriteLine("Laputa says: " + e.Data);
                 }
             };
         }
@@ -55,14 +52,13 @@ namespace ClientProxyCommon.WebSocketCaller
         public void SendResult(ActionData data, Action before = null)
         {
             _websocket.SendAsync(
-                new ArraySegment<byte>(data.AsBytes()), 
-                WebSocketMessageType.Binary,  
+                new ArraySegment<byte>(data.AsBytes()),
+                WebSocketMessageType.Binary,
                 true, CancellationToken.None).ContinueWith(
                 _ => {
                     before?.Invoke();
                     return Task.CompletedTask;
                 }).Unwrap().Wait();
-
         }
 
         public Task<ActionData> SendWithCnfirmAsync(ActionData data, Action before = null)

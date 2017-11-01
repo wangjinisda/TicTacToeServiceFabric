@@ -23,10 +23,8 @@ namespace ClientProxyCommon.Extensions
             }
         }
 
-
         public static byte[] AsBigger(this ActionData[] datas)
         {
-
             foreach(var data in datas)
             {
             }

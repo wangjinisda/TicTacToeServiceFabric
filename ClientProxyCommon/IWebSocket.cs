@@ -12,12 +12,10 @@ namespace ClientProxyCommon
     {
         Task<ActionData> SendWithCnfirmAsync(ActionData box, Action before = null);
 
-        void SendResult(ActionData box, Action before = null);
+        void SendResult(ActionData data, Action before = null);
 
         ActionDelegate ActionDelegate { get; }
 
-
         void CloseAsync();
-
     }
 }

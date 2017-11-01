@@ -13,7 +13,6 @@ namespace ClientProxyCommon.WebSocketCaller
 {
     public class WebSocketServerEnhance : WebSocketServerBase
     {
-
         public WebSocketServerEnhance(WebSocket websocket, ISocketCaller socketCaller)
             :base(websocket, socketCaller)
         {
@@ -33,6 +32,5 @@ namespace ClientProxyCommon.WebSocketCaller
                     return source.Task;
                 }).Unwrap();
         }
-
     }
 }

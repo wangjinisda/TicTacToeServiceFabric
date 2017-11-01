@@ -11,9 +11,9 @@ namespace WebConnector.Source
 {
     public class ActorHelper
     {
-        private ITicTacToeEvents _ticTacToeEvents;
+        private readonly ITicTacToeEvents _ticTacToeEvents;
 
-        private Dictionary<string, ITicTacToe> _dic = new Dictionary<string, ITicTacToe>();
+        private readonly Dictionary<string, ITicTacToe> _dic = new Dictionary<string, ITicTacToe>();
 
         public ActorHelper(IWebSocket webSocket)
         {
@@ -22,7 +22,6 @@ namespace WebConnector.Source
 
         public ITicTacToe GetActor(string name)
         {
-
             if(_dic.ContainsKey(name))
             {
                 return _dic[name];
@@ -34,9 +33,7 @@ namespace WebConnector.Source
                 game.SubscribeAsync(_ticTacToeEvents);
                 _dic.Add(name, game);
                 return game;
-
             }
-
 
             /*
             var gameId = new ActorId(name);
@@ -45,9 +42,6 @@ namespace WebConnector.Source
             _dic.Add(name, game);
             return game;
             */
-
         }
-
-
     }
 }

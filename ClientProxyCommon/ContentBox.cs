@@ -30,7 +30,6 @@ namespace ClientProxyCommon
                     PayLoad = Encoding.UTF8.GetString(json, 0, json.Length)
                 };
             }
-
         }
     }
 }

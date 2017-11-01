@@ -27,8 +27,6 @@ namespace ClientProxyCommon
         /// <param name="player">Player type.</param>
         Task<bool> Unregister(PlayerProfileModel model, bool earlyBailOut);
 
-
         void CloseAsync();
-
     }
 }

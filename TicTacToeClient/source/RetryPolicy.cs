@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TicTacToe.Client.source
 {
-    public class RetryPolicy
+    public static class RetryPolicy
     {
         /// <summary>
         /// Retry on transient error using exponential backoff algorithm.
@@ -44,9 +44,7 @@ namespace TicTacToe.Client.source
         /// <returns></returns>
         private static int GetWaitTimeExp(int retryCount)
         {
-            int waitTime = (int)(Math.Pow(2, retryCount) * 100);
-
-            return waitTime;
+            return (int)(Math.Pow(2, retryCount) * 100);
         }
     }
 }
