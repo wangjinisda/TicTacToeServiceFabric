@@ -126,26 +126,38 @@ namespace ClientProxyCommon.Abstractions
             _websocket.Dispose();
         }
 
-        public void SendResult(ActionData box)
-        {
-            EnequeueActionData(box);
-        }
-
         public abstract Task<ActionData> SendWithCnfirmAsync(ActionData box, Action before = null);
 
         public virtual Task SendLogic(ActionData box)
         {
             _mre.Wait();
-            return _websocket.SendAsync(
+            if(_websocket.State == WebSocketState.Open)
+            {
+                return _websocket.SendAsync(
                 new ArraySegment<byte>(box.AsBytes()),
                 WebSocketMessageType.Binary,
                 true, CancellationToken.None);
+            }
+            else
+            {
+                throw new InvalidOperationException("websocket error.");
+            }
+            
         }
 
-        public async void CloseAsync()
+        public async Task CloseAsync()
         {
             _cancellationTokenSource.Cancel();
-            await _websocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "pls close!", CancellationToken.None);
+            await _websocket.CloseAsync(
+                WebSocketCloseStatus.NormalClosure,
+                "pls close!", CancellationToken.None)
+                .ContinueWith(_ => this.Dispose());
+        }
+
+        public void SendResult(ActionData data, Action before = null)
+        {
+            EnequeueActionData(data);
+            before?.Invoke();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace TicTacToe.Client.source
 
         public void EndGame()
         {
-            Application.Exit();
+            //Application.Exit();
         }
 
         public void StartGame()
@@ -148,8 +148,8 @@ namespace TicTacToe.Client.source
             */
 
             // for remote test
-            // return new WebSocketTicTacToeProxy("ws://jingamedev.eastasia.cloudapp.azure.com:8081/ws", _events);
-            return new WebSocketTicTacToeProxy("ws://localhost:8081/ws", _events);
+             return new WebSocketTicTacToeProxy("ws://jingamedev.eastasia.cloudapp.azure.com:8081/ws", _events);
+            //return new WebSocketTicTacToeProxy("ws://localhost:8081/ws", _events);
         }
     }
 }

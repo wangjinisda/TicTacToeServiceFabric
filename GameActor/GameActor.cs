@@ -56,9 +56,9 @@ namespace GameActor
             events.Moved(moveMetadata.Player, gameState.Matrix);
         }
 
-        public async Task<bool> Register(PlayerProfileModel model)
+        public async Task<bool> Register(PlayerProfileModel playerProfileModel)
         {
-            var requestedPlayer = model.PlayerType;
+            var requestedPlayer = playerProfileModel.PlayerType;
             var gameState = await StateManager.GetStateAsync<GameState>("GameState");
             var players = gameState.Players;
             const int MAX_PLAYER_COUNT = 2;
@@ -94,9 +94,9 @@ namespace GameActor
             events.GameStarted();
         }
 
-        public async Task<bool> Unregister(PlayerProfileModel model, bool earlyBailOut)
+        public async Task<bool> Unregister(PlayerProfileModel playerProfileModel, bool earlyBailOut)
         {
-            var player = model.PlayerType;
+            var player = playerProfileModel.PlayerType;
             var gameState = await StateManager.GetStateAsync<GameState>("GameState");
             var players = gameState.Players;
 

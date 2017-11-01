@@ -50,7 +50,7 @@ namespace WebConnector
                     if (context.WebSockets.IsWebSocketRequest)
                     {
                         WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                        await SocketEntry.Echo(context, webSocket);
+                        await SocketEntry.Echo(webSocket);
                     }
                     else
                     {

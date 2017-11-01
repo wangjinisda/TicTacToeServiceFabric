@@ -75,11 +75,15 @@ namespace ClientProxyCommon.WebSocketCaller
                     }  catch(Exception e)
                     {
                         Debug.WriteLine($"hellow world:   {e.Message}");
-                        await _websocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+                        // await _websocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
                     }
                 }
 
-                await _websocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+                // await _websocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+                if (!_cancellationTokenSource.IsCancellationRequested)
+                {
+                    await CloseAsync();
+                }
             });
         }
 
@@ -117,10 +121,13 @@ namespace ClientProxyCommon.WebSocketCaller
                 }).Unwrap();
         }
 
-        public async void CloseAsync()
+        public async Task CloseAsync()
         {
             _cancellationTokenSource.Cancel();
-            await _websocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "pls close!", CancellationToken.None);
+            await _websocket.CloseAsync(
+                WebSocketCloseStatus.NormalClosure,
+                "pls close!", CancellationToken.None)
+                .ContinueWith(_=> _websocket.Dispose());
         }
     }
 }

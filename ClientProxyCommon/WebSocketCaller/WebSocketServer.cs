@@ -80,9 +80,12 @@ namespace ClientProxyCommon.WebSocketCaller
             _websocket.Dispose();
         }
 
-        public async void CloseAsync()
+        public async Task CloseAsync()
         {
-            await _websocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "pls close!", CancellationToken.None);
+            await _websocket.CloseAsync(
+                WebSocketCloseStatus.NormalClosure, 
+                "pls close!", CancellationToken.None)
+                .ContinueWith(_=> this.Dispose());
         }
     }
 }

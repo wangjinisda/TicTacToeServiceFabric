@@ -136,9 +136,9 @@ namespace TicTacToe.Client
         private void frmTicTacToe_FormClosed(object sender, FormClosedEventArgs e)
         {
             // Since frmPlayerChoice is hidden.
-
-            ActorProxy.CloseAsync();
-            Application.Exit();
+            ActorProxy.CloseAsync()
+                .ContinueWith(_ => Application.Exit())
+                .ConfigureAwait(false);   
         }
 
         #endregion

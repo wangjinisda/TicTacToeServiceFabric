@@ -32,10 +32,12 @@ namespace WebConnector.Source
                 }catch(Exception e)
                 {
                     Debug.WriteLine($"hellow world server end:   {e.Message}");
-                    await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+                    break;
+                    // await socket.CloseAsync();
                 }
             }
-            await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+           // await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+            await socket.CloseAsync();
         }
     }
 }

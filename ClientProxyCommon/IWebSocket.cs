@@ -16,6 +16,6 @@ namespace ClientProxyCommon
 
         ActionDelegate ActionDelegate { get; }
 
-        void CloseAsync();
+        Task CloseAsync();
     }
 }

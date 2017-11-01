@@ -23,9 +23,9 @@ namespace TicTacToe.Client.source.Layer
             
         }
 
-        public void CloseAsync()
+        public Task CloseAsync()
         {
-            _webSocketClient.CloseAsync();
+            return _webSocketClient.CloseAsync();
         }
 
         public void Dispose()

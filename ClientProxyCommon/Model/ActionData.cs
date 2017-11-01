@@ -35,7 +35,6 @@ namespace ClientProxyCommon.Model
         public string UniqueID { get => _id; set { _id = value; }  }
 
         [DataMember]
-
         public ActionDataType ActionDataType { get; set; }
     }
 }

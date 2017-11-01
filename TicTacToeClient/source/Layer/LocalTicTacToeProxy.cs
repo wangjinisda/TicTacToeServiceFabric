@@ -17,9 +17,9 @@ namespace TicTacToe.Client.source.Layer
             _ticTacToe = ticTacToe;
         }
 
-        public void CloseAsync()
+        public Task CloseAsync()
         {
-            return;
+            return Task.CompletedTask;
         }
 
         public void Dispose()

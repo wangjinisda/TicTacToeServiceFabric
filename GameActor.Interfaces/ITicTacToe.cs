@@ -12,7 +12,7 @@ namespace GameActor.Interfaces
         /// Registers the player with the server players list.
         /// </summary>
         /// <param name="requestedPlayer">Requested player type. Allotment is based on availability.</param>
-        Task<bool> Register(PlayerProfileModel requestedPlayer);
+        Task<bool> Register(PlayerProfileModel playerProfileModel);
 
         /// <summary>
         /// Broadcasts the move metadata to both the clients.
@@ -24,6 +24,6 @@ namespace GameActor.Interfaces
         /// Unregisters the player from the server players list.
         /// </summary>
         /// <param name="player">Player type.</param>
-        Task<bool> Unregister(PlayerProfileModel player, bool earlyBailOut);
+        Task<bool> Unregister(PlayerProfileModel playerProfileModel, bool earlyBailOut);
     }
 }
