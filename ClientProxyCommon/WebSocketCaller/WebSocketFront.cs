@@ -59,7 +59,17 @@ namespace ClientProxyCommon.WebSocketCaller
                 //_websocket.State
                 _mre.Set();
                 var buffer = new byte[1024 * 4];
-                WebSocketReceiveResult result = await _websocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                WebSocketReceiveResult result = null;
+                try
+                {
+                    result = await _websocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+
+                
                 while (!result.CloseStatus.HasValue && !_cancellationTokenSource.IsCancellationRequested)
                 {
                     try

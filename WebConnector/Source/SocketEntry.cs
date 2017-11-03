@@ -20,8 +20,9 @@ namespace WebConnector.Source
             var caller = new ActorSocketCaller();
             var socket = new WebSocketServerEnhance(webSocket, caller);
             var buffer = new byte[1024 * 4];
+            var  _cancellationTokenSource = new CancellationTokenSource();
             WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            while (!result.CloseStatus.HasValue)
+            while (!result.CloseStatus.HasValue && !_cancellationTokenSource.IsCancellationRequested)
             {
                 var content = buffer.AsActionData(result.Count);
 
@@ -32,7 +33,7 @@ namespace WebConnector.Source
                 }catch(Exception e)
                 {
                     Debug.WriteLine($"hellow world server end:   {e.Message}");
-                    break;
+                    _cancellationTokenSource.Cancel();
                     // await socket.CloseAsync();
                 }
             }

@@ -41,7 +41,7 @@ namespace ClientProxyCommon.Abstractions
 
             ActionDelegateInitial();
 
-            ThreadShell.LongRun(async() =>
+            ThreadShell.LongRun(async () =>
             {
                 while (!_cancellationTokenSource.IsCancellationRequested)
                 {
@@ -53,6 +53,7 @@ namespace ClientProxyCommon.Abstractions
                     }
                     catch (Exception e)
                     {
+                        _cancellationTokenSource.Cancel();
                         Debug.WriteLine($"hellow world server:   {e.Message}");
                         continue;
                     }
@@ -66,7 +67,8 @@ namespace ClientProxyCommon.Abstractions
             {
                 if (action.ActionType == ActionType.Call)
                 {
-                    await _socketCaller.CallAsync(action, ret => {
+                    await _socketCaller.CallAsync(action, ret =>
+                    {
                         SendResult(ret);
                         return Task.CompletedTask;
                     });
@@ -99,7 +101,7 @@ namespace ClientProxyCommon.Abstractions
 
         public virtual Task ConsumeActionDatas()
         {
-            if(_queue.Count > 0)
+            if (_queue.Count > 0)
             {
                 var ret = _queue.TryDequeue(out var data);
 
@@ -131,18 +133,19 @@ namespace ClientProxyCommon.Abstractions
         public virtual Task SendLogic(ActionData box)
         {
             _mre.Wait();
-            if(_websocket.State == WebSocketState.Open)
+            if (_websocket.State == WebSocketState.Open)
             {
                 return _websocket.SendAsync(
                 new ArraySegment<byte>(box.AsBytes()),
                 WebSocketMessageType.Binary,
                 true, CancellationToken.None);
+
             }
             else
             {
                 throw new InvalidOperationException("websocket error.");
             }
-            
+
         }
 
         public async Task CloseAsync()
