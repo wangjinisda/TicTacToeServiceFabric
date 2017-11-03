@@ -139,7 +139,6 @@ namespace TicTacToe.Client.source
 
         private ITicTacToeProxy GetActorProxy()
         {
-
             /*
             var gameId = new ActorId(_view.GameRoom);
             var game = ActorProxy.Create<ITicTacToe>(gameId, ConfigurationManager.AppSettings["TicTacToeServer"]);
@@ -148,8 +147,8 @@ namespace TicTacToe.Client.source
             */
 
             // for remote test
-             return new WebSocketTicTacToeProxy("ws://jingamedev.eastasia.cloudapp.azure.com:8081/ws", _events);
-            //return new WebSocketTicTacToeProxy("ws://localhost:8081/ws", _events);
+            return new WebSocketTicTacToeProxy("ws://jingamedev.eastasia.cloudapp.azure.com:8081/ws", _events);
+            // return new WebSocketTicTacToeProxy("ws://localhost:8081/ws", _events);
         }
     }
 }
