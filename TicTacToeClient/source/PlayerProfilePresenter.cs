@@ -145,9 +145,10 @@ namespace TicTacToe.Client.source
             game.SubscribeAsync(_events);
             return new LocalTicTacToeProxy(game);
             */
+           //  http://jianwwinsf.eastasia.cloudapp.azure.com:19080 
 
             // for remote test
-            return new WebSocketTicTacToeProxy("ws://jingamedev.eastasia.cloudapp.azure.com:8081/ws", _events);
+            return new WebSocketTicTacToeProxy("ws://jianwwinsf.eastasia.cloudapp.azure.com:881/ws", _events);
             // return new WebSocketTicTacToeProxy("ws://localhost:8081/ws", _events);
         }
     }
